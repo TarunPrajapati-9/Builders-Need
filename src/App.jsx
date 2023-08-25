@@ -21,23 +21,27 @@ const darkTheme = createTheme({
 
 function App() {
   const [theme, setTheme] = React.useState("light");
-  const [selectedIndex, setSelectedIndex] = React.useState(-1);
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 
   return (
-    <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
-      <Sidebar
-        toggleTheme={toggleTheme}
-        theme={theme}
-        selectedIndex={selectedIndex}
-        setSelectedIndex={setSelectedIndex}
-      />
-      {}
-      {selectedIndex === -1 || selectedIndex === 6 ? <Home /> : ""}
-    </ThemeProvider>
+    <Router>
+      <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
+        <Sidebar toggleTheme={toggleTheme} theme={theme} />
+        {}
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route exact path="/items" element={<Items />} />
+          <Route exact path="/activeOrders" element={<Orders />} />
+          <Route exact path="/history" element={<History />} />
+          <Route exact path="/about" element={<Items />} />
+          <Route exact path="/contact" element={<Items />} />
+          <Route exact path="/profile" element={<Home />} />
+        </Routes>
+      </ThemeProvider>
+    </Router>
   );
 }
 

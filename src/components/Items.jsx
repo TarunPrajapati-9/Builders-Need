@@ -27,12 +27,12 @@ function Items() {
   };
   return (
     <>
-      <Grid container spacing={2} style={{ marginTop: "6vh" }}>
+      <Grid container spacing={2} style={{ marginTop: "10vh" }} align="center">
         {items.map((text, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
             <Card
               onClick={() => handleClick(index)}
-              sx={{ maxWidth: 345, border: "1px solid rgba(0, 0, 0, 0.2)" }}
+              sx={{ maxWidth: 340, border: "1px solid rgba(0, 0, 0, 0.2)" }}
               key={text}
             >
               <CardActionArea>
