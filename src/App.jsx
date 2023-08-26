@@ -6,6 +6,7 @@ import Items from "./components/Items";
 import Home from "./components/Home";
 import Orders from "./components/Orders";
 import History from "./components/History";
+import BottomBar from "./components/BottomBar/BottomBar";
 
 const lightTheme = createTheme({
   palette: {
@@ -30,7 +31,6 @@ function App() {
     <Router>
       <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
         <Sidebar toggleTheme={toggleTheme} theme={theme} />
-        {}
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/items" element={<Items />} />
@@ -40,6 +40,7 @@ function App() {
           <Route exact path="/contact" element={<Items />} />
           <Route exact path="/profile" element={<Home />} />
         </Routes>
+        <BottomBar />
       </ThemeProvider>
     </Router>
   );

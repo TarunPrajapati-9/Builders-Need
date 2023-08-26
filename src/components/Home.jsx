@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
-import { Button, CssBaseline, Grid, Paper, Typography } from "@mui/material";
+import { Button, CssBaseline, Grid, Fab, Typography } from "@mui/material";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import Items from "./Items";
 
 const images = [
   "steel.png",
@@ -29,7 +32,7 @@ function Home() {
   };
 
   useEffect(() => {
-    const interval = setInterval(nextImage, 3000); // Auto advance every 3 seconds
+    const interval = setInterval(nextImage, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -48,31 +51,23 @@ function Home() {
     <>
       <CssBaseline />
       <Grid container justifyContent="center" style={{ marginTop: "2.5vh" }}>
-        <Grid
-          item
-          xs={12}
-          md={6}
-          style={{
-            position: "relative",
-            width: "100%",
-          }}
-        >
+        <div style={{ position: "relative", width: "100%" }}>
           <img
             src={images[currentImageIndex]}
             alt={`Image ${currentImageIndex + 1}`}
             style={{
               width: "100%",
-              height: "300px",
+              height: "400px",
               objectFit: "cover",
             }}
           />
           <div
             style={{
               position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              backgroundColor: "#E0F2F1", // Light Blue Background Color
+              bottom: "0",
+              left: "0",
+              right: "0",
+              backgroundColor: "#E0F2F1",
               padding: "20px",
               border: "1px solid #1976D2",
               borderRadius: "5px",
@@ -103,8 +98,23 @@ function Home() {
               Explore
             </Button>
           </div>
-        </Grid>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "10px",
+            }}
+          >
+            <Fab color="primary" onClick={prevImage}>
+              <ArrowBackIosNewIcon />
+            </Fab>
+            <Fab color="primary" onClick={nextImage}>
+              <ArrowForwardIosIcon />
+            </Fab>
+          </div>
+        </div>
       </Grid>
+      <Items />
     </>
   );
 }

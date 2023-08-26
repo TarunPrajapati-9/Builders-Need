@@ -27,7 +27,12 @@ function Items() {
   };
   return (
     <>
-      <Grid container spacing={2} style={{ marginTop: "10vh" }} align="center">
+      <Grid
+        container
+        spacing={2}
+        style={{ marginTop: "10vh", marginBottom: "5vh" }}
+        align="center"
+      >
         {items.map((text, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
             <Card
