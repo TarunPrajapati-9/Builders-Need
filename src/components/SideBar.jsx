@@ -23,13 +23,27 @@ import {
   DrawerHeader,
   MaterialUISwitch,
 } from "../styles/navbarstyle";
+import BasicPopover from "./Popper";
 
 const drawerWidth = 240;
 
 export default function PersistentDrawerLeft({ toggleTheme, theme }) {
   const [open, setOpen] = useState(false);
+  const [isProfileModalOpen, setProfileModalOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
   const handleDrawerOpen = () => {
     setOpen(true);
+  };
+
+  const handleProfileModalOpen = (event) => {
+    setProfileModalOpen(true);
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleProfileModalClose = () => {
+    setProfileModalOpen(false);
+    setAnchorEl(null);
   };
 
   const handleDrawerClose = () => {
@@ -38,6 +52,11 @@ export default function PersistentDrawerLeft({ toggleTheme, theme }) {
 
   return (
     <Box sx={{ display: "flex" }}>
+      <BasicPopover
+        open={isProfileModalOpen}
+        handleClose={handleProfileModalClose}
+        anchorEl={anchorEl}
+      />
       <CssBaseline />
       <MuiAppBar position="fixed" open={open}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -54,7 +73,9 @@ export default function PersistentDrawerLeft({ toggleTheme, theme }) {
               </Typography>
             </IconButton>
           </div>
-          <Avatar alt="Remy Sharp" />
+          <Avatar alt="Remy Sharp" onClick={handleProfileModalOpen}>
+            <img src="/favicon.png" />
+          </Avatar>
         </Toolbar>
       </MuiAppBar>
 

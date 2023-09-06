@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { Stack, Typography, Badge } from "@mui/material";
+import { Stack, Badge } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import GitHubIcon from "@mui/icons-material/GitHub";
@@ -12,6 +12,7 @@ function BottomBar() {
     window.open(url, "_blank");
   };
 
+  let date = new Date();
   return (
     <>
       <div>
@@ -26,19 +27,10 @@ function BottomBar() {
         >
           <Box sx={{ width: "50%" }}>
             <h2 className="myTypo">Follow Us</h2>
-            <Stack
-              direction={"row"}
-              spacing={1}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-              mt={2}
-            >
+            <Stack direction={"row"} spacing={1} className="stack" mt={2}>
               <Badge
-                className="iconHover"
+                className="iconHover badge"
                 color="secondary"
-                style={{ cursor: "pointer" }}
                 onClick={() => {
                   navigateToURL("https://www.youtube.com");
                 }}
@@ -46,9 +38,8 @@ function BottomBar() {
                 <FacebookIcon />
               </Badge>
               <Badge
-                className="iconHover"
+                className="iconHover badge"
                 color="secondary"
-                style={{ cursor: "pointer" }}
                 onClick={() => {
                   navigateToURL("https://www.instagram.com/kathiyawadi__09");
                 }}
@@ -56,9 +47,8 @@ function BottomBar() {
                 <InstagramIcon />
               </Badge>
               <Badge
-                className="iconHover"
+                className="iconHover badge"
                 color="secondary"
-                style={{ cursor: "pointer" }}
                 onClick={() => {
                   navigateToURL("https://www.instagram.com/kathiyawadi__09");
                 }}
@@ -66,9 +56,8 @@ function BottomBar() {
                 <TwitterIcon />
               </Badge>
               <Badge
-                className="iconHover"
+                className="iconHover badge"
                 color="secondary"
-                style={{ cursor: "pointer" }}
                 onClick={() => {
                   navigateToURL("https://www.instagram.com/kathiyawadi__09");
                 }}
@@ -78,14 +67,7 @@ function BottomBar() {
             </Stack>
           </Box>
           <Box sx={{ width: "25%" }}>
-            <Stack
-              direction={"column"}
-              spacing={1}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
+            <Stack direction={"column"} spacing={1} className="stack">
               <h4 className="headingBlur">USEFUL LINKS</h4>
               <Link to="/items" className="myLink">
                 About Us
@@ -102,14 +84,7 @@ function BottomBar() {
             </Stack>
           </Box>
           <Box sx={{ width: "25%" }}>
-            <Stack
-              direction={"column"}
-              spacing={1}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
+            <Stack direction={"column"} spacing={1} className="stack">
               <h4 className="headingBlur">SUPPORT</h4>
               <Link to="/items" className="myLink">
                 Customer Support
@@ -126,7 +101,9 @@ function BottomBar() {
             </Stack>
           </Box>
         </Box>
-        <h4 className="myTypo">Copyright &copy; 2023 Builder&apos;s Needs</h4>
+        <h4 className="myTypo">
+          Copyright &copy; {date.getFullYear()} Builder&apos;s Needs
+        </h4>
       </div>
     </>
   );

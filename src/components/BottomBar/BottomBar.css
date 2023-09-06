@@ -20,5 +20,14 @@
 }
 
 .iconHover:hover {
-    background-color: rgb(223, 223, 223);
+    background-color: rgb(35, 35, 35);
+}
+
+.stack {
+    display: flex;
+    justify-content: center;
+}
+
+.badge {
+    cursor: pointer;
 }

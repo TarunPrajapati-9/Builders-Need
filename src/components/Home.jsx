@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Button, CssBaseline, Grid, Fab, Typography } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import Items from "./Items";
 
 const images = [
   "steel.png",
@@ -32,7 +31,7 @@ function Home() {
   };
 
   useEffect(() => {
-    const interval = setInterval(nextImage, 5000);
+    const interval = setInterval(nextImage, 4000);
     return () => clearInterval(interval);
   }, []);
 
@@ -114,7 +113,6 @@ function Home() {
           </div>
         </div>
       </Grid>
-      <Items />
     </>
   );
 }

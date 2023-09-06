@@ -7,6 +7,8 @@ import Home from "./components/Home";
 import Orders from "./components/Orders";
 import History from "./components/History";
 import BottomBar from "./components/BottomBar/BottomBar";
+import Signup from "./components/Accounts/Signup";
+import SignIn from "./components/Accounts/SignIn";
 
 const lightTheme = createTheme({
   palette: {
@@ -39,6 +41,8 @@ function App() {
           <Route exact path="/about" element={<Items />} />
           <Route exact path="/contact" element={<Items />} />
           <Route exact path="/profile" element={<Home />} />
+          <Route exact path="/signup" element={<Signup />} />
+          <Route exact path="/signin" element={<SignIn />} />
         </Routes>
         <BottomBar />
       </ThemeProvider>
