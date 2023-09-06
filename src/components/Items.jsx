@@ -30,7 +30,7 @@ function Items() {
       <Grid
         container
         spacing={2}
-        style={{ marginTop: "10vh", marginBottom: "5vh" }}
+        style={{ marginTop: "1vh", marginBottom: "5vh" }}
         align="center"
       >
         {items.map((text, index) => (

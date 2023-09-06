@@ -1,14 +1,7 @@
 /* eslint-disable react/prop-types */
-import {
-  Popover,
-  Card,
-  CardContent,
-  CardActions,
-  Avatar,
-  Typography,
-} from "@mui/material";
+import { Popover, Card, CardContent, Avatar, Typography } from "@mui/material";
 
-export default function BasicPopover({ open, handleClose, anchorEl }) {
+export default function ProfilePopper({ open, handleClose, anchorEl }) {
   open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
