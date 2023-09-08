@@ -1,5 +1,22 @@
-import { Container, Avatar, Stack, Typography, Box } from "@mui/material";
+import { ApartmentRounded } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import {
+  Container,
+  Avatar,
+  Stack,
+  Typography,
+  Box,
+  IconButton,
+} from "@mui/material";
+
+import "./about.css";
+
 export default function AboutUs() {
+  const navigate = useNavigate();
+  const handleHome = () => {
+    navigate("/");
+  };
+
   return (
     <>
       <Container
@@ -12,10 +29,18 @@ export default function AboutUs() {
         }}
       >
         <Stack spacing={2} mb={2.5}>
-          <Typography variant="caption" fontSize={30} align="center">
-            Builder &apos;s Need Team
-          </Typography>
-          <Typography variant="body1" fontSize={16} align="justify">
+          <IconButton sx={{ color: "black" }} onClick={handleHome}>
+            <ApartmentRounded />
+            <Typography fontSize={30} align="center" fontFamily={"Montserrat"}>
+              &nbsp;Builder &apos;s Need Team
+            </Typography>
+          </IconButton>
+          <Typography
+            variant="body1"
+            fontSize={16}
+            align="justify"
+            fontFamily="Work Sans"
+          >
             Builder&apos;s Needs is the thought that all the persons who is
             related with construction business are can be buy the the things
             which are useful in constructing. The Main Thought behind this web
@@ -37,7 +62,7 @@ export default function AboutUs() {
           padding: "25px",
         }}
       >
-        <Typography variant="caption" fontSize={30} align="center">
+        <Typography fontSize={30} fontFamily={"Montserrat"} align="center">
           Meet The Developer
         </Typography>
         <Box
@@ -62,7 +87,7 @@ export default function AboutUs() {
             }}
           />
           <h2>Tarun Prajapati</h2>
-          <Typography variant="body1" fontSize={18} align="justify">
+          <Typography fontSize={18} align="justify" fontFamily="Work Sans">
             Email: tarun.prajapati912@gmail.com
             <br />
             GitHub:
@@ -72,13 +97,13 @@ export default function AboutUs() {
               rel="noreferrer"
               style={{ textDecoration: "none", color: "#2563EB" }}
             >
-              @TarunPrajapati
+              &nbsp;@TarunPrajapati
             </a>
             <br />
             <br />
           </Typography>
         </Box>
-        <Typography variant="body2" fontSize={16}>
+        <Typography variant="body2" fontSize={16} fontFamily="Work Sans">
           Full-Stack Web Developer(MERN Stack) with knowledge of UI Libraries
           like Bootstrap, Material UI. Previously Working on ASP.NET and PHP.
         </Typography>

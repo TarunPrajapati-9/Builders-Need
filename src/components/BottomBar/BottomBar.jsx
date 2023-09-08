@@ -7,7 +7,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import { Link } from "react-router-dom";
 import "./BottomBar.css";
 import { useState } from "react";
-import Model from "../Model";
+import Model from "../ContactModel";
 
 function BottomBar() {
   const [isContactModalOpen, setContactModalOpen] = useState(false);

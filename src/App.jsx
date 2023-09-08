@@ -9,7 +9,7 @@ import History from "./components/History";
 import BottomBar from "./components/BottomBar/BottomBar";
 import Signup from "./components/Accounts/Signup";
 import SignIn from "./components/Accounts/SignIn";
-import AboutUs from "./components/AboutUs";
+import AboutUs from "./components/About/AboutUs";
 
 const lightTheme = createTheme({
   palette: {

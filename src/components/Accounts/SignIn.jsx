@@ -27,15 +27,15 @@ export default function SignIn() {
           sx={{
             margin: 1,
             background: "transparent",
-            width: "600px",
-            height: "60px",
+            width: "5rem",
+            height: "5rem",
           }}
           src="/favicon.png"
         />
         <Typography component="h1" variant="h5">
           Login
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit}  sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required
