@@ -49,7 +49,7 @@ function Home() {
   return (
     <>
       <CssBaseline />
-      <Grid container justifyContent="center" style={{ marginTop: "2.5vh" }}>
+      <Grid container justifyContent="center" sx={{ marginTop: ".4vh" }}>
         <div style={{ position: "relative", width: "100%" }}>
           <img
             src={images[currentImageIndex]}

@@ -6,15 +6,33 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import { Link } from "react-router-dom";
 import "./BottomBar.css";
+import { useState } from "react";
+import Model from "../Model";
 
 function BottomBar() {
+  const [isContactModalOpen, setContactModalOpen] = useState(false);
+
   const navigateToURL = (url) => {
     window.open(url, "_blank");
+  };
+
+  const handleContactModalOpen = () => {
+    setContactModalOpen(true);
+  };
+
+  const handleContactModalClose = () => {
+    setContactModalOpen(false);
   };
 
   let date = new Date();
   return (
     <>
+      {isContactModalOpen && (
+        <Model
+          open={isContactModalOpen}
+          handleClose={handleContactModalClose}
+        />
+      )}
       <div>
         <hr />
         <Box
@@ -69,13 +87,13 @@ function BottomBar() {
           <Box sx={{ width: "25%" }}>
             <Stack direction={"column"} spacing={1} className="stack">
               <h4 className="headingBlur">USEFUL LINKS</h4>
-              <Link to="/items" className="myLink">
+              <Link to="/about" className="myLink">
                 About Us
               </Link>
               <Link to="/items" className="myLink">
                 Items
               </Link>
-              <Link to="/items" className="myLink">
+              <Link onClick={handleContactModalOpen} className="myLink">
                 Contact Us
               </Link>
               <Link to="/items" className="myLink">

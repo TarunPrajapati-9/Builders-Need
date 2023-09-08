@@ -40,7 +40,6 @@ function App() {
           <Route exact path="/activeOrders" element={<Orders />} />
           <Route exact path="/history" element={<History />} />
           <Route exact path="/about" element={<AboutUs />} />
-          <Route exact path="/contact" element={<Items />} />
           <Route exact path="/profile" element={<Home />} />
           <Route exact path="/signup" element={<Signup />} />
           <Route exact path="/signin" element={<SignIn />} />

@@ -14,7 +14,7 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-function ProfileModal({ open, handleClose }) {
+export default function Model({ open, handleClose }) {
   return (
     <Modal
       open={open}
@@ -34,10 +34,8 @@ function ProfileModal({ open, handleClose }) {
   );
 }
 
-export default ProfileModal;
-
 {
-  /* <ProfileModal
+  /* <Model
           open={isProfileModalOpen}
           handleClose={handleProfileModalClose}
         /> */

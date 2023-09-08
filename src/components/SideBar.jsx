@@ -51,14 +51,14 @@ export default function PersistentDrawerLeft({ toggleTheme, theme }) {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ position: "sticky", top: 0, zIndex: 1000 }}>
       <ProfilePopper
         open={isProfileModalOpen}
         handleClose={handleProfileModalClose}
         anchorEl={anchorEl}
       />
       <CssBaseline />
-      <MuiAppBar position="sticky" open={open}>
+      <MuiAppBar position="relative" open={open}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <div>
             <IconButton
@@ -77,7 +77,8 @@ export default function PersistentDrawerLeft({ toggleTheme, theme }) {
             alt="Remy Sharp"
             onClick={handleProfileModalOpen}
             src="/favicon.png"
-          ></Avatar>
+            sx={{ cursor: "pointer" }}
+          />
         </Toolbar>
       </MuiAppBar>
 
