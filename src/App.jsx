@@ -26,7 +26,8 @@ const darkTheme = createTheme({
 function App() {
   const [theme, setTheme] = React.useState("light");
 
-  const toggleTheme = () => {
+  const toggleTheme = (e) => {
+    e.preventDefault();
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 

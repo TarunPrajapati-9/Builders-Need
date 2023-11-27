@@ -1,4 +1,5 @@
 import { ApartmentRounded } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -12,6 +13,7 @@ import {
 import "./about.css";
 
 export default function AboutUs() {
+  const theme = useTheme();
   const navigate = useNavigate();
   const handleHome = () => {
     navigate("/");
@@ -29,7 +31,7 @@ export default function AboutUs() {
         }}
       >
         <Stack spacing={2} mb={2.5}>
-          <IconButton sx={{ color: "black" }} onClick={handleHome}>
+          <IconButton onClick={handleHome}>
             <ApartmentRounded />
             <Typography fontSize={30} align="center" fontFamily={"Montserrat"}>
               &nbsp;Builder &apos;s Need Team
@@ -58,7 +60,7 @@ export default function AboutUs() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          backgroundColor: "#F5EFE7",
+          backgroundColor: theme.palette.mode === "light" ? "#F5EFE7" : "#000",
           padding: "25px",
         }}
       >

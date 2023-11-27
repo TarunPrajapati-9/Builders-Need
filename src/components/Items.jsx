@@ -1,30 +1,25 @@
 import * as React from "react";
+import axios from "axios";
+
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import Chip from "@mui/material/Chip";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import { Button, CardActionArea, CardActions } from "@mui/material";
 
-import Orders from "./Orders";
-import History from "./History";
-
 function Items() {
-  const [selectedIndex, setSelectedIndex] = React.useState(-1);
-  const items = [
-    "Steel",
-    "Cement",
-    "Sand",
-    "Aggregate",
-    "Bricks",
-    "Blocks",
-    "Tiles",
-    "Chemicals",
-  ];
+  const [items, setItems] = React.useState([]);
 
-  const handleClick = (index) => {
-    setSelectedIndex(index);
-  };
+  React.useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BACKEND_URI}/api/items/fetchitems`)
+      .then((response) => setItems(response.data))
+      .catch((error) => console.error("Error fetching items:", error));
+  }, []);
+
+  const handleClick = () => {};
   return (
     <>
       <Grid
@@ -33,45 +28,32 @@ function Items() {
         style={{ marginTop: "1vh", marginBottom: "5vh" }}
         align="center"
       >
-        {items.map((text, index) => (
+        {items.map((item, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
             <Card
               onClick={() => handleClick(index)}
-              sx={{ maxWidth: 340, border: "1px solid rgba(0, 0, 0, 0.2)" }}
-              key={text}
+              sx={{
+                position: "relative",
+                maxWidth: 340,
+                border: "1px solid rgba(0, 0, 0, 0.2)",
+              }}
+              key={item.name}
             >
               <CardActionArea>
                 <CardMedia
                   component="img"
                   height="140"
-                  image={
-                    index === 0
-                      ? "steel.png"
-                      : index === 1
-                      ? "cement.png"
-                      : index === 2
-                      ? "sand.jpeg"
-                      : index === 3
-                      ? "aggregate.jpg"
-                      : index === 4
-                      ? "brick.png"
-                      : index === 5
-                      ? "block.png"
-                      : index === 6
-                      ? "tile2.png"
-                      : index === 7
-                      ? "chemical.png"
-                      : "/"
-                  }
+                  image={`${import.meta.env.VITE_BACKEND_URI}/uploads/${
+                    item.imageUrl
+                  }`}
                   alt="Image"
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    {text}
+                    {item.name}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Here, see various types of {text} and see how it suitable
-                    for you.
+                    {item.description}
                   </Typography>
                 </CardContent>
               </CardActionArea>
@@ -83,17 +65,23 @@ function Items() {
                 >
                   Explore
                 </Button>
+                <Chip
+                  label={item.category}
+                  style={{
+                    position: "absolute",
+                    borderRadius: "10px",
+                    top: "8px",
+                    right: "8px",
+                    zIndex: 1,
+                    backgroundColor: "rgba(255, 255,255, 0.7)", // Adjust the RGBA values as needed
+                    color: "rgba(0, 0, 255, 1)",
+                  }}
+                />
               </CardActions>
             </Card>
           </Grid>
         ))}
       </Grid>
-
-      <div>
-        {selectedIndex === 1 && <Items />}
-        {selectedIndex === 2 && <Orders />}
-        {selectedIndex === 3 && <History />}
-      </div>
     </>
   );
 }
