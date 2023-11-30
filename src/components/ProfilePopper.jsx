@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import { Popover, Card, CardContent, Avatar, Typography } from "@mui/material";
 
+import { MaterialUISwitch } from "../styles/navbarstyle";
+
 export default function ProfilePopper({ open, handleClose, anchorEl }) {
   open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
@@ -26,6 +28,11 @@ export default function ProfilePopper({ open, handleClose, anchorEl }) {
           >
             <Avatar alt="profile photo" src="/favicon.png" />
             <Typography sx={{ p: 2, marginLeft: 1 }}>Username</Typography>
+            <MaterialUISwitch
+              sx={{ m: 1 }}
+              // onClick={toggleTheme}
+              // checked={theme === "dark"}
+            />
           </div>
         </CardContent>
       </Card>

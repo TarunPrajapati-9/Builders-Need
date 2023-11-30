@@ -22,66 +22,64 @@ function Items() {
   const handleClick = () => {};
   return (
     <>
-      <Grid
-        container
-        spacing={2}
-        style={{ marginTop: "1vh", marginBottom: "5vh" }}
-        align="center"
-      >
-        {items.map((item, index) => (
-          <Grid item xs={12} sm={6} md={3} key={index}>
-            <Card
-              onClick={() => handleClick(index)}
-              sx={{
-                position: "relative",
-                maxWidth: 340,
-                border: "1px solid rgba(0, 0, 0, 0.2)",
-              }}
-              key={item.name}
-            >
-              <CardActionArea>
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image={`${import.meta.env.VITE_BACKEND_URI}/uploads/${
-                    item.imageUrl
-                  }`}
-                  alt="Image"
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {item.name}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {item.description}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-              <CardActions>
-                <Button
-                  size="small"
-                  color="primary"
-                  onClick={() => handleClick(index)}
-                >
-                  Explore
-                </Button>
-                <Chip
-                  label={item.category}
-                  style={{
-                    position: "absolute",
-                    borderRadius: "10px",
-                    top: "8px",
-                    right: "8px",
-                    zIndex: 1,
-                    backgroundColor: "rgba(255, 255,255, 0.7)", // Adjust the RGBA values as needed
-                    color: "rgba(0, 0, 255, 1)",
-                  }}
-                />
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+      <div className="my-3 mx-3">
+        <Grid container spacing={2} align="center">
+          {items.map((item, index) => (
+            <Grid item xs={12} sm={6} md={3} key={index}>
+              <Card
+                onClick={() => handleClick(index)}
+                sx={{
+                  position: "relative",
+                  maxWidth: 340,
+                  height: 370,
+                  border: "1px solid rgba(0, 0, 0, 0.2)",
+                }}
+                key={item.name}
+              >
+                <CardActionArea>
+                  <CardMedia
+                    component="img"
+                    image={`${import.meta.env.VITE_BACKEND_URI}/uploads/${
+                      item.imageUrl
+                    }`}
+                    className="h-44"
+                    alt="Image"
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {item.name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {item.description}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+                <CardActions>
+                  <Button
+                    size="small"
+                    color="primary"
+                    onClick={() => handleClick(index)}
+                  >
+                    Explore
+                  </Button>
+                  <Chip
+                    label={item.category}
+                    style={{
+                      position: "absolute",
+                      borderRadius: "10px",
+                      top: "8px",
+                      right: "8px",
+                      zIndex: 1,
+                      backgroundColor: "rgba(255, 255,255, 0.7)", // Adjust the RGBA values as needed
+                      color: "rgba(0, 0, 255, 1)",
+                    }}
+                  />
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </div>
     </>
   );
 }

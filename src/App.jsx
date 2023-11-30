@@ -1,6 +1,5 @@
 import React from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Sidebar from "./components/SideBar";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Items from "./components/Items";
 import Home from "./components/Home";
@@ -10,6 +9,7 @@ import BottomBar from "./components/BottomBar/BottomBar";
 import Signup from "./components/Accounts/Signup";
 import SignIn from "./components/Accounts/SignIn";
 import AboutUs from "./components/About/AboutUs";
+import NavBar from "./components/NavBar/NavBar";
 
 const lightTheme = createTheme({
   palette: {
@@ -34,7 +34,8 @@ function App() {
   return (
     <Router>
       <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
-        <Sidebar toggleTheme={toggleTheme} theme={theme} />
+        {/* <Sidebar toggleTheme={toggleTheme} theme={theme} /> */}
+        <NavBar />
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/items" element={<Items />} />

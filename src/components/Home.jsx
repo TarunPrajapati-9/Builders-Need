@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, CssBaseline, Grid, Fab, Typography } from "@mui/material";
+import { Button, CssBaseline, Grid, Typography } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
@@ -60,22 +60,7 @@ function Home() {
               objectFit: "cover",
             }}
           />
-          <div
-            style={{
-              position: "absolute",
-              bottom: "0",
-              left: "0",
-              right: "0",
-              backgroundColor: "#E0F2F1",
-              padding: "20px",
-              border: "1px solid #1976D2",
-              borderRadius: "5px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
-            }}
-          >
+          <div className="absolute bottom-0 left-0 right-0 bg-green-100 border border-blue-500 p-5 rounded-b-2xl flex flex-col items-center justify-center text-center">
             <Typography
               variant="caption"
               style={{
@@ -104,12 +89,12 @@ function Home() {
               padding: "10px",
             }}
           >
-            <Fab color="primary" onClick={prevImage}>
+            <Button color="primary" onClick={prevImage}>
               <ArrowBackIosNewIcon />
-            </Fab>
-            <Fab color="primary" onClick={nextImage}>
+            </Button>
+            <Button color="primary" onClick={nextImage}>
               <ArrowForwardIosIcon />
-            </Fab>
+            </Button>
           </div>
         </div>
       </Grid>
