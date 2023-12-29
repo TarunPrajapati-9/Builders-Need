@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import { Button, CardActionArea, CardActions } from "@mui/material";
 
-function Items() {
+function Products() {
   const [items, setItems] = React.useState([]);
 
   React.useEffect(() => {
@@ -84,4 +84,4 @@ function Items() {
   );
 }
 
-export default Items;
+export default Products;

@@ -75,7 +75,7 @@ export default function NavBar() {
             />
           </div>
           <Link
-            to="/items"
+            to="/cart"
             className={`mt-1.5 text-xl leading-6 font-serif font-black opacity-60 hover:opacity-100 ${
               location.pathname === "/" ? "opacity-100" : "opacity-60"
             }`}

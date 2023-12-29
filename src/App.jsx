@@ -1,7 +1,7 @@
 import React from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Items from "./components/Items";
+import Products from "./components/Products";
 import Home from "./components/Home";
 import Orders from "./components/Orders";
 import History from "./components/History";
@@ -26,10 +26,10 @@ const darkTheme = createTheme({
 function App() {
   const [theme, setTheme] = React.useState("light");
 
-  const toggleTheme = (e) => {
-    e.preventDefault();
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
-  };
+  // const toggleTheme = (e) => {
+  //   e.preventDefault();
+  //   setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+  // };
 
   return (
     <Router>
@@ -38,7 +38,7 @@ function App() {
         <NavBar />
         <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route exact path="/items" element={<Items />} />
+          <Route exact path="/products" element={<Products />} />
           <Route exact path="/activeOrders" element={<Orders />} />
           <Route exact path="/history" element={<History />} />
           <Route exact path="/about" element={<AboutUs />} />

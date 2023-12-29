@@ -1,5 +1,4 @@
 // import * as React from "react";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -24,14 +23,10 @@ export default function Signup() {
     <Container component="main" maxWidth="xs" className="container">
       <CssBaseline />
       <Box className="box">
-        <Avatar
-          sx={{
-            margin: 1,
-            background: "transparent",
-            width: "5rem",
-            height: "5rem",
-          }}
-          src="/favicon.png"
+        <img
+          className="h-16 w-auto  transition-transform hover:scale-110"
+          src="/small-logo.png"
+          alt="logo"
         />
         <Typography component="h1" variant="h5">
           Create New Account

@@ -33,8 +33,8 @@ function BottomBar() {
           handleClose={handleContactModalClose}
         />
       )}
-      <div>
-        <hr />
+      <div className="mt-2">
+        <hr className="border-t-2" />
         <Box
           sx={{
             width: "100%",
@@ -90,8 +90,8 @@ function BottomBar() {
               <Link to="/about" className="myLink">
                 About Us
               </Link>
-              <Link to="/items" className="myLink">
-                Items
+              <Link to="/products" className="myLink">
+                Products
               </Link>
               <Link onClick={handleContactModalOpen} className="myLink">
                 Contact Us
@@ -101,7 +101,7 @@ function BottomBar() {
               </Link>
             </Stack>
           </Box>
-          <Box sx={{ width: "25%" }}>
+          <Box sx={{ width: "25%" }} className="mb-2">
             <Stack direction={"column"} spacing={1} className="stack">
               <h4 className="headingBlur">SUPPORT</h4>
               <Link to="/items" className="myLink">
@@ -111,7 +111,7 @@ function BottomBar() {
                 Terms & Conditions
               </Link>
               <Link to="/items" className="myLink">
-                Privicy Policy
+                Privacy Policy
               </Link>
               <Link to="/items" className="myLink">
                 Online Shopping Policy
@@ -119,7 +119,8 @@ function BottomBar() {
             </Stack>
           </Box>
         </Box>
-        <h4 className="myTypo">
+        <hr className="border-t-2" />
+        <h4 className="myTypo my-1">
           Copyright &copy; {date.getFullYear()} Builder&apos;s Needs
         </h4>
       </div>
