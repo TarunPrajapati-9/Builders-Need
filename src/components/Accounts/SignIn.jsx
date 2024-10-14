@@ -37,6 +37,7 @@ export default function SignIn() {
             fullWidth
             id="email"
             label="Email Address"
+            type="email"
             name="email"
             autoComplete="email"
             autoFocus

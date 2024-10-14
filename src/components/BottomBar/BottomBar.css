@@ -1,33 +1,33 @@
 .myLink {
-    text-decoration: none;
-    color: inherit;
-    font-family: 'Noto Sans JP', sans-serif;
+  text-decoration: none;
+  color: inherit;
+  font-family: "Noto Sans JP", sans-serif;
 }
 
 .myLink:hover {
-    color: rgb(181, 181, 181);
+  color: rgb(181, 181, 181);
 }
 
 .myTypo {
-    display: flex;
-    justify-content: center;
-    font-family: 'Raleway', sans-serif;
+  display: flex;
+  justify-content: center;
+  font-family: "Raleway", sans-serif;
 }
 
 .headingBlur {
-    font-family: 'Noto Sans JP', sans-serif;
-    color: rgb(163, 163, 163);
+  font-family: "Noto Sans JP", sans-serif;
+  color: rgb(163, 163, 163);
 }
 
 .iconHover:hover {
-    background-color: rgb(35, 35, 35);
+  color: rgb(181, 181, 181);
 }
 
 .stack {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .badge {
-    cursor: pointer;
+  cursor: pointer;
 }

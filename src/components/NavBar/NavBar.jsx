@@ -98,7 +98,7 @@ export default function NavBar() {
             &nbsp; Products
           </Link>
           <Link
-            to="/brands"
+            to="/becomeSeller"
             className={`mt-1.5 text-xl leading-6 font-serif font-black opacity-60 hover:opacity-100 ${
               location.pathname === "/brands" ? "opacity-100" : "opacity-60"
             }`}
