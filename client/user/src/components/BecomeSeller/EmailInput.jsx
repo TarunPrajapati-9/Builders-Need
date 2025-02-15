@@ -1,6 +1,6 @@
-// EmailInput.js
-import PropTypes from "prop-types"; // Import PropTypes
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import BecomeSeller from "./BecomeSeller";
 import {
   Box,
   Typography,
@@ -9,25 +9,58 @@ import {
   InputAdornment,
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email"; // Import email icon
-import ArrowBackIcon from "@mui/icons-material/ArrowBack"; // Import back icon
+import { sendOtp, verifyOtp } from "../../utils/seller/dataPoster";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "../Toast";
 
-const EmailInput = ({ email, setEmail, handleGetOtp, handleBack }) => {
+const EmailInput = () => {
+  const [email, setEmail] = useState("");
   const [otp, setOtp] = useState(""); // State for storing OTP
-  const [isOtpSent, setIsOtpSent] = useState(false); // State to track if OTP is sent
+  const navigate = useNavigate();
+  const { showToast } = useToast(); // Get showToast function from context
+  const [isOtpSent, setIsOtpSent] = useState(false);
 
+  // Mutation to send OTP
+  const { mutate: sendOtpMutate, isPending: sentOtpPending } = useMutation({
+    mutationFn: sendOtp,
+    onSuccess: (res) => {
+      if (res.success) {
+        setIsOtpSent(true);
+        showToast(res.message, "success");
+      } else {
+        showToast("Error: " + res.message, "error");
+      }
+    },
+  });
+
+  // Mutation to verify OTP
+  const { mutate: submitOtpMutate, isPending: submitOtpPending } = useMutation({
+    mutationFn: verifyOtp,
+    onSuccess: (res) => {
+      if (res.success) {
+        showToast(res.message, "success");
+        navigate("/becomeSeller/sellerType");
+      } else {
+        showToast("Error: " + res.message, "error");
+      }
+    },
+  });
+
+  // Function to send OTP
   const handleGetOtpClick = () => {
-    handleGetOtp(); // Call the parent function to handle OTP logic
-    setIsOtpSent(true); // Set state to indicate OTP is sent
+    sendOtpMutate(email);
   };
 
+  // Function to submit OTP
   const handleSubmitOtp = () => {
-    // Implement OTP submission logic here
-    alert(`Submitting OTP: ${otp}`);
-    // Add logic for validation, etc.
+    submitOtpMutate({
+      email: email,
+      otp: otp,
+    });
   };
 
   return (
-    <>
+    <BecomeSeller>
       <Typography variant="h4" gutterBottom className="text-center">
         Enter your Email for OTP
       </Typography>
@@ -37,6 +70,7 @@ const EmailInput = ({ email, setEmail, handleGetOtp, handleBack }) => {
         label="Email"
         variant="outlined"
         value={email}
+        disabled={sentOtpPending || isOtpSent}
         onChange={(e) => setEmail(e.target.value)}
         InputProps={{
           startAdornment: (
@@ -61,10 +95,11 @@ const EmailInput = ({ email, setEmail, handleGetOtp, handleBack }) => {
           <Button
             variant="contained"
             color="primary"
+            disabled={sentOtpPending}
             onClick={handleGetOtpClick}
             sx={{ width: "30%" }}
           >
-            Get OTP
+            {sentOtpPending ? <span>Loading...</span> : "Get OTP"}
           </Button>
         </Box>
       ) : (
@@ -74,6 +109,7 @@ const EmailInput = ({ email, setEmail, handleGetOtp, handleBack }) => {
             fullWidth
             label="Enter OTP"
             variant="outlined"
+            disabled={submitOtpPending}
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
             sx={{ mt: 2, ml: 4 }}
@@ -93,43 +129,15 @@ const EmailInput = ({ email, setEmail, handleGetOtp, handleBack }) => {
               color="primary"
               onClick={handleSubmitOtp}
               sx={{ width: "30%" }}
-              disabled={!otp} // Disable if OTP input is empty
+              disabled={!otp || submitOtpPending} // Disable if OTP input is empty
             >
-              Submit OTP
+              {submitOtpPending ? <span>Loading...</span> : "Submit OTP"}
             </Button>
           </Box>
         </>
       )}
-
-      {/* Back Button */}
-      <Box
-        sx={{
-          mt: 4,
-          display: "flex",
-          justifyContent: "flex-start",
-          width: "100%",
-          ml: 4,
-        }}
-      >
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={handleBack}
-          startIcon={<ArrowBackIcon />}
-        >
-          Back
-        </Button>
-      </Box>
-    </>
+    </BecomeSeller>
   );
-};
-
-// Define PropTypes for the component
-EmailInput.propTypes = {
-  email: PropTypes.string.isRequired,
-  setEmail: PropTypes.func.isRequired,
-  handleGetOtp: PropTypes.func.isRequired,
-  handleBack: PropTypes.func.isRequired,
 };
 
 export default EmailInput;

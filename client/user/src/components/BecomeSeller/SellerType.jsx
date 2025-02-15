@@ -1,11 +1,25 @@
-// SellerType.js
-import PropTypes from "prop-types"; // Import PropTypes
+import { useState } from "react"; // Import React and useState
 import { Box, Grid, Typography, Button } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"; // Import check mark icon
+import BecomeSeller from "./BecomeSeller";
 
-const SellerType = ({ selectedOption, handleOptionClick, handleNext }) => {
+const SellerType = () => {
+  // State to manage the selected option
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  // Handle option click
+  const handleOptionClick = (option) => {
+    setSelectedOption(option); // Set the selected option
+  };
+
+  // Handle Next button click
+  const handleNext = () => {
+    console.log("Next button clicked with option:", selectedOption);
+    // Add your logic here for the next step
+  };
+
   return (
-    <>
+    <BecomeSeller>
       <Typography
         variant="h4"
         gutterBottom
@@ -21,7 +35,7 @@ const SellerType = ({ selectedOption, handleOptionClick, handleNext }) => {
               variant={selectedOption === option ? "contained" : "outlined"}
               fullWidth
               size="large"
-              onClick={() => handleOptionClick(option)}
+              onClick={() => handleOptionClick(option)} // Handle option click
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -59,21 +73,14 @@ const SellerType = ({ selectedOption, handleOptionClick, handleNext }) => {
           variant="contained"
           color="primary"
           sx={{ width: "30%" }}
-          disabled={!selectedOption}
-          onClick={handleNext}
+          disabled={!selectedOption} // Disable button if no option selected
+          onClick={handleNext} // Handle next button click
         >
           Next
         </Button>
       </Box>
-    </>
+    </BecomeSeller>
   );
-};
-
-// Define PropTypes for the component
-SellerType.propTypes = {
-  selectedOption: PropTypes.string.isRequired,
-  handleOptionClick: PropTypes.func.isRequired,
-  handleNext: PropTypes.func.isRequired,
 };
 
 export default SellerType;

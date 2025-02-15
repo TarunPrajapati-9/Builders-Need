@@ -48,7 +48,7 @@ function Products() {
                 <CardActionArea>
                   <CardMedia
                     component="img"
-                    image={`${import.meta.env.VITE_BACKEND_URL}/uploads/${
+                    image={`${import.meta.env.VITE_BACKEND_URI}/uploads/${
                       item.imageUrl
                     }`}
                     className="h-44"
