@@ -29,7 +29,7 @@ const SellerType = () => {
       </Typography>
 
       <Grid container spacing={2} sx={{ mt: 2, maxWidth: "80%", ml: 5 }}>
-        {["Dealer", "Distributor", "Manufacturer"].map((option) => (
+        {["Manufacturer", "Distributor"].map((option) => (
           <Grid item xs={12} key={option}>
             <Button
               variant={selectedOption === option ? "contained" : "outlined"}

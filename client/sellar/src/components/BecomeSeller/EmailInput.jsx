@@ -27,6 +27,7 @@ const EmailInput = () => {
       if (res.success) {
         setIsOtpSent(true);
         showToast(res.message, "success");
+        localStorage.setItem("email", email);
       } else {
         showToast("Error: " + res.message, "error");
       }
@@ -61,7 +62,7 @@ const EmailInput = () => {
 
   return (
     <BecomeSeller>
-      <Typography variant="h4" gutterBottom className="text-center">
+      <Typography variant="h6" gutterBottom className="text-center">
         Enter your Email for OTP
       </Typography>
 
