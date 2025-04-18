@@ -1,9 +1,11 @@
-import express, { Application, Request, Response } from "express";
+import { Application, Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import "dotenv/config";
-import connectDB from "./Config/dbConnection"; // Removed .js (TS will auto-resolve .ts)
+import connectDB from "./Config/dbConnection";
 import sellerRoutes from "./Routes/sellerRoutes";
+import itemRoutes from "./Routes/itemRoutes";
 
 // Connect to the database
 connectDB();
@@ -21,8 +23,9 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 
-// Use seller routes for '/api/seller'
+// Routes
 app.use("/api/seller", sellerRoutes);
+app.use("/api/items", itemRoutes);
 
 // Start the server
 app.listen(port, () => {

@@ -6,8 +6,12 @@ interface ISeller extends Document {
   email: string;
   password: string;
   location: string;
-  type: "distributor" | "manufacturer"; // Restrict values
-  items: ("Steel" | "Cement" | "Sand" | "Brick" | "Aggregate")[]; // Array with allowed values
+  sellerType: "distributor" | "manufacturer"; // Restrict values
+  phone: string;
+  profileImage?: string;
+  isVerified?: boolean;
+  status?: "active" | "inactive" | "suspended"; // Restrict values
+  rating?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -35,17 +39,34 @@ const SellerSchema = new Schema<ISeller>(
       type: String,
       required: true,
       trim: true,
-      enum: ["Surat", "Ahmedabad", "Vadodara", "Rajkot"],
+      enum: ["SURAT", "AHMADABAD", "VADODARA", "RAJKOT"],
     },
-    type: {
+    sellerType: {
       type: String,
       required: true,
       enum: ["distributor", "manufacturer"],
     },
-    items: {
-      type: [String],
+    phone: {
+      type: String,
+      unique: true,
       required: true,
-      enum: ["Steel", "Cement", "Sand", "Brick", "Aggregate"],
+    },
+    profileImage: {
+      type: String,
+      default: "https://yourdomain.com/default.png",
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    status: {
+      type: String,
+      enum: ["active", "inactive", "suspended"],
+      default: "inactive",
+    },
+    rating: {
+      type: Number,
+      default: 0,
     },
   },
   {

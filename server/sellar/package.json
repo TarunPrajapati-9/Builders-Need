@@ -2,11 +2,11 @@
   "name": "seller-backend",
   "version": "1.0.0",
   "description": "Backend API for admin panel using Express, MongoDB, and Multer for file uploads.",
-  "main": "server.js",
+  "main": "server.ts",
   "scripts": {
-    "dev": "nodemon --exec node --loader ts-node/esm src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "dev": "nodemon src/server.ts"
   },
   "author": "Your Name",
   "license": "ISC",

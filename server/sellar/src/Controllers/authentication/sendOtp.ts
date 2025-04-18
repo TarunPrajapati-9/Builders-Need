@@ -10,6 +10,7 @@ interface OtpEntry {
 
 // Store OTPs temporarily (Ideally, use Redis or a database)
 let otpStore: Record<string, OtpEntry> = {};
+export let otpVerifiedStore: Record<string, boolean> = {};
 
 // Configure Nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -70,25 +71,30 @@ export const verifyOtp = async (req: Request, res: Response): Promise<void> => {
       res
         .status(400)
         .json(createResponse(false, "Email and OTP are required", []));
+      return;
     }
 
     const otpData = otpStore[email];
     if (!otpData) {
       res.status(400).json(createResponse(false, "No OTP found", []));
+      return;
     }
 
-    // Check if OTP has expired
     if (Date.now() > otpData.expiresAt) {
       delete otpStore[email];
       res.status(400).json(createResponse(false, "OTP expired", []));
+      return;
     }
 
-    // Check if OTP matches
     if (otpData.otp !== Number(otp)) {
       res.status(400).json(createResponse(false, "Invalid OTP", []));
+      return;
     }
 
-    delete otpStore[email]; // Clear OTP after successful verification
+    // ✅ OTP verified — allow password update later
+    otpVerifiedStore[email] = true;
+    delete otpStore[email];
+
     res.json(createResponse(true, "OTP verified successfully", { email }));
   } catch (error) {
     res

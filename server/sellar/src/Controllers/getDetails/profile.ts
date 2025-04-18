@@ -16,7 +16,9 @@ export const getSellerProfile = async (
     }
 
     res.json(
-      createResponse(true, "Seller profile retrieved successfully", { seller })
+      createResponse(true, "Seller profile retrieved successfully", {
+        seller,
+      })
     );
   } catch (error) {
     res

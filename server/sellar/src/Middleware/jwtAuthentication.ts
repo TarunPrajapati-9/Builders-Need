@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { createResponse } from "../Utils/createResponse";
 
 dotenv.config();
 
@@ -21,7 +22,7 @@ export const authenticateSeller = (
   if (!token) {
     res
       .status(401)
-      .json({ success: false, message: "Access denied. No token provided." });
+      .json(createResponse(false, "Access denied. No token provided.", []));
     return;
   }
 
@@ -33,6 +34,6 @@ export const authenticateSeller = (
     req.user = decoded; // Store decoded user data in request object
     next();
   } catch (error) {
-    res.status(400).json({ success: false, message: "Invalid token." });
+    res.status(400).json(createResponse(false, "Invalid token.", { error }));
   }
 };

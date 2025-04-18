@@ -41,7 +41,16 @@ export const loginSeller = async (req: Request, res: Response) => {
       }
     );
 
-    res.json(createResponse(true, "Seller logged in successfully", { token }));
+    res.json(
+      createResponse(true, "Seller logged in successfully", {
+        token,
+        id: existingSeller._id,
+        name: existingSeller.name,
+        email: existingSeller.email,
+        sellerType: existingSeller.sellerType,
+        location: existingSeller.location,
+      })
+    );
   } catch (error) {
     res
       .status(500)
