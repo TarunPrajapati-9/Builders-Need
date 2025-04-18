@@ -43,16 +43,16 @@ export const registerSeller = async (
     await newSeller.save();
 
     // Generate JWT token
-    // const token = jwt.sign(
-    //   { id: newSeller._id },
-    //   process.env.JWT_SECRET as string,
-    //   {
-    //     expiresIn: "7d", // Token valid for 7 days
-    //   }
-    // );
+    const token = jwt.sign(
+      { id: newSeller._id },
+      process.env.JWT_SECRET as string,
+      {
+        expiresIn: "7d", // Token valid for 7 days
+      }
+    );
 
     // Success response
-    res.json(createResponse(true, "Seller registered successfully", {}));
+    res.json(createResponse(true, "Seller registered successfully", { token }));
   } catch (error) {
     res
       .status(500)

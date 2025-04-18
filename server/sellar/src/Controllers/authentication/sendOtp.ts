@@ -32,7 +32,7 @@ export const sendOtp = async (req: Request, res: Response): Promise<void> => {
       res.status(400).json(createResponse(false, "Email is required", []));
     }
 
-    const otp = Math.floor(Math.random() * 1000000 + 1);
+    const otp = Math.floor(Math.random() * 900000) + 100000;
 
     // Send OTP email
     const mailOptions = {

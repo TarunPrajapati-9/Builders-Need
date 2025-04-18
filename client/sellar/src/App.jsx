@@ -1,40 +1,54 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Register from "./pages/Register";
+import ToastProvider from "./context/ToastProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
-
-import EmailInput from "./components/BecomeSeller/EmailInput";
-import SellerType from "./components/BecomeSeller/SellerType";
-import ProductSelection from "./components/BecomeSeller/ProductSelection";
-import ToastProvider from "./components/Toast";
-import Home from "./components/Home";
+import Login from "./pages/Login";
+import ForgotPassword from "./pages/ForgetPassword";
+import AddItem from "./pages/AddItem";
+import ItemList from "./pages/ItemList";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
+  function AppContent() {
+    return (
+      <>
+        <Routes>
+          <Route path="/" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route
+            path="/items"
+            element={
+              <ProtectedRoute>
+                <ItemList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-item"
+            element={
+              <ProtectedRoute>
+                <AddItem />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </>
+    );
+  }
   return (
-    <QueryClientProvider client={queryClient}>
-      <ToastProvider>
-        <Router>
-          <Routes>
-            <Route exact path="/" element={<Home />} />
-            <Route
-              exact
-              path="/becomeSeller/getEmail"
-              element={<EmailInput />}
-            />
-            <Route
-              exact
-              path="/becomeSeller/sellerType"
-              element={<SellerType />}
-            />
-            <Route
-              exact
-              path="/becomeSeller/productSelection"
-              element={<ProductSelection />}
-            />
-          </Routes>
-        </Router>
-      </ToastProvider>
-    </QueryClientProvider>
+    <>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <ToastProvider>
+            <AppContent />
+          </ToastProvider>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </>
   );
 }
 

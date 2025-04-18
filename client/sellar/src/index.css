@@ -1,0 +1,44 @@
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+.form-appear {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.form-appear-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.step-transition-enter {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.step-transition-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.step-transition-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.step-transition-exit-active {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 300ms, transform 300ms;
+}
