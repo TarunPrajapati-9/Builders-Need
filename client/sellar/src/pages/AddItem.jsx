@@ -10,6 +10,9 @@ import {
   MenuItem,
   InputAdornment,
 } from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
+import { useToast } from "../context/ToastContext";
+import { addItem } from "../utils/Items/dataPoster";
 
 const CATEGORIES = [
   "Flooring",
@@ -21,6 +24,8 @@ const CATEGORIES = [
 
 export default function AddItem() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -31,13 +36,24 @@ export default function AddItem() {
     imageFile: null,
     imagePreview: null,
   });
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+
+  const [formErrors, setFormErrors] = useState({});
+  const { mutate, isPending } = useMutation({
+    mutationFn: addItem,
+    onSuccess: (res) => {
+      if (res.success) {
+        showToast(res.message, "success");
+        navigate("/items");
+      } else {
+        showToast("Error: " + res.message, "error");
+      }
+    },
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setError("");
+    setFormErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleImageChange = (e) => {
@@ -48,32 +64,54 @@ export default function AddItem() {
         imageFile: file,
         imagePreview: URL.createObjectURL(file),
       }));
+      setFormErrors((prev) => ({ ...prev, imageFile: "" }));
     }
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    if (!formData.name.trim()) errors.name = "Name is required.";
+    if (!formData.description.trim())
+      errors.description = "Description is required.";
+    if (!formData.category) errors.category = "Please select a category.";
+    if (!formData.price || Number(formData.price) <= 0)
+      errors.price = "Enter a valid price.";
+    if (!formData.quantity || Number(formData.quantity) < 0)
+      errors.quantity = "Enter a valid quantity.";
+    if (Number(formData.discount) < 0)
+      errors.discount = "Discount can't be negative.";
+    if (!formData.imageFile) errors.imageFile = "Please upload an image.";
+    return errors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      if (!formData.imageFile) {
-        throw new Error("Please select an image");
-      }
 
-      // Upload image to Cloudinary
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
+    try {
       const imageData = new FormData();
       imageData.append("file", formData.imageFile);
-      imageData.append("upload_preset", "your_upload_preset"); // Replace with your upload preset
+      imageData.append("upload_preset", "buildersneed");
 
       const uploadResponse = await fetch(
-        "https://api.cloudinary.com/v1_1/your_cloud_name/image/upload", // Replace with your cloud name
+        "https://api.cloudinary.com/v1_1/dfkodomj0/image/upload",
         {
           method: "POST",
           body: imageData,
         }
       );
+
+      if (!uploadResponse.ok) {
+        throw new Error("Image upload failed. Please try again.");
+      }
+
       const imageJson = await uploadResponse.json();
 
-      // Create item with uploaded image URL
       const itemData = {
         name: formData.name,
         description: formData.description,
@@ -84,20 +122,15 @@ export default function AddItem() {
         imageUrl: imageJson.secure_url,
       };
 
-      // Add your create item API call here
-      // await createItem(itemData)
-
-      navigate("/items");
+      mutate(itemData);
     } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      setFormErrors({ general: err.message });
     }
   };
 
   return (
-    <Box sx={{ p: 3, maxWidth: 600, mx: "auto" }}>
-      <Typography variant="h4" component="h1" gutterBottom fontWeight="bold">
+    <Box sx={{ p: 3, mx: "auto" }}>
+      <Typography variant="h5" component="h1" sx={{ mb: 2 }} fontWeight="bold">
         Add New Item
       </Typography>
 
@@ -111,7 +144,8 @@ export default function AddItem() {
               value={formData.name}
               onChange={handleChange}
               margin="normal"
-              required
+              error={!!formErrors.name}
+              helperText={formErrors.name}
             />
 
             <TextField
@@ -123,7 +157,8 @@ export default function AddItem() {
               margin="normal"
               multiline
               rows={4}
-              required
+              error={!!formErrors.description}
+              helperText={formErrors.description}
             />
 
             <TextField
@@ -134,7 +169,8 @@ export default function AddItem() {
               value={formData.category}
               onChange={handleChange}
               margin="normal"
-              required
+              error={!!formErrors.category}
+              helperText={formErrors.category}
             >
               {CATEGORIES.map((category) => (
                 <MenuItem key={category} value={category}>
@@ -151,12 +187,13 @@ export default function AddItem() {
               value={formData.price}
               onChange={handleChange}
               margin="normal"
-              required
               InputProps={{
                 startAdornment: (
-                  <InputAdornment position="start">$</InputAdornment>
+                  <InputAdornment position="start">₹</InputAdornment>
                 ),
               }}
+              error={!!formErrors.price}
+              helperText={formErrors.price}
             />
 
             <TextField
@@ -167,7 +204,8 @@ export default function AddItem() {
               value={formData.quantity}
               onChange={handleChange}
               margin="normal"
-              required
+              error={!!formErrors.quantity}
+              helperText={formErrors.quantity}
             />
 
             <TextField
@@ -181,6 +219,8 @@ export default function AddItem() {
               InputProps={{
                 endAdornment: <InputAdornment position="end">%</InputAdornment>,
               }}
+              error={!!formErrors.discount}
+              helperText={formErrors.discount}
             />
 
             <Button
@@ -188,6 +228,7 @@ export default function AddItem() {
               component="label"
               fullWidth
               sx={{ mt: 2, height: 56 }}
+              error={!!formErrors.imageFile}
             >
               Upload Image
               <input
@@ -197,6 +238,11 @@ export default function AddItem() {
                 onChange={handleImageChange}
               />
             </Button>
+            {formErrors.imageFile && (
+              <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+                {formErrors.imageFile}
+              </Typography>
+            )}
 
             {formData.imagePreview && (
               <Box sx={{ mt: 2, textAlign: "center" }}>
@@ -208,9 +254,9 @@ export default function AddItem() {
               </Box>
             )}
 
-            {error && (
+            {formErrors.general && (
               <Typography color="error" sx={{ mt: 2 }}>
-                {error}
+                {formErrors.general}
               </Typography>
             )}
 
@@ -225,10 +271,10 @@ export default function AddItem() {
               <Button
                 variant="contained"
                 type="submit"
-                disabled={loading}
+                disabled={isPending}
                 sx={{ flex: 2 }}
               >
-                {loading ? "Adding..." : "Add Item"}
+                {isPending ? "Adding..." : "Add Item"}
               </Button>
             </Box>
           </form>

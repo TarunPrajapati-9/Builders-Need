@@ -13,7 +13,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PropTypes from "prop-types";
 import { useToast } from "../../context/ToastContext";
 import { useMutation } from "@tanstack/react-query";
-import { sendOtp } from "../../utils/dataPoster";
+import { sendOtp } from "../../utils/Profile/dataPoster";
 import Cookies from "js-cookie";
 
 EmailStep.propTypes = {

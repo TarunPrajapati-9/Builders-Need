@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Container } from "@mui/material";
 import EmailStep from "../components/Registration/EmailStep";
 import OtpStep from "../components/Registration/OtpStep";
@@ -6,9 +6,18 @@ import RegistrationStepper from "../components/Registration/RegistrationStepper"
 import SellerDetailsStep from "../components/Registration/SellerDetailsStep";
 import CompletionStep from "../components/Registration/CompletionStep";
 import SellerRegistrationHeader from "../components/Registration/SellerRegistrationHeader";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 function Register() {
   const [activeStep, setActiveStep] = useState(0);
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = Cookies.get("sellerToken");
+    if (token) {
+      navigate("/items");
+    }
+  }, [navigate]);
 
   const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);

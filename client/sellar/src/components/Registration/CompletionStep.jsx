@@ -21,7 +21,7 @@ import StoreIcon from "@mui/icons-material/Store";
 import PhoneIcon from "@mui/icons-material/Phone";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import { useQuery } from "@tanstack/react-query";
-import { getProfile } from "../../utils/dataGetter";
+import { getProfile } from "../../utils/Profile/dataGetter";
 
 export default function CompletionStep() {
   const { data, isLoading, isError, error } = useQuery({

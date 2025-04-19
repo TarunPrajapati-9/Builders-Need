@@ -16,7 +16,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "../context/ToastContext";
-import { login } from "../utils/dataPoster";
+import { login } from "../utils/Profile/dataPoster";
 import Cookies from "js-cookie";
 
 export default function Login() {
@@ -40,15 +40,33 @@ export default function Login() {
     },
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setError("");
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = {};
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    }
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters long";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
     mutate(formData);
   };
 
@@ -84,6 +102,8 @@ export default function Login() {
               margin="normal"
               value={formData.email}
               onChange={handleChange}
+              error={!!errors.email}
+              helperText={errors.email}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -101,6 +121,8 @@ export default function Login() {
               margin="normal"
               value={formData.password}
               onChange={handleChange}
+              error={!!errors.password}
+              helperText={errors.password}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -120,12 +142,6 @@ export default function Login() {
               }}
             />
 
-            {error && (
-              <Typography color="error" variant="body2" sx={{ mt: 1 }}>
-                {error}
-              </Typography>
-            )}
-
             <Button
               fullWidth
               variant="contained"
@@ -133,7 +149,7 @@ export default function Login() {
               disabled={isPending}
               sx={{ mt: 3, mb: 2, height: 48 }}
             >
-              Login
+              {isPending ? "Logging in..." : "Login"}
             </Button>
 
             <Box sx={{ textAlign: "center" }}>

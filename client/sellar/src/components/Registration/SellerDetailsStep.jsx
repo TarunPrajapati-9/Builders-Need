@@ -21,7 +21,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
-import { registerSeller } from "../../utils/dataPoster";
+import { registerSeller } from "../../utils/Profile/dataPoster";
 import { useToast } from "../../context/ToastContext";
 import PropTypes from "prop-types";
 import { useMutation } from "@tanstack/react-query";

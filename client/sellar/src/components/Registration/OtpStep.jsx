@@ -12,7 +12,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useMutation } from "@tanstack/react-query";
-import { verifyOtp, sendOtp } from "../../utils/dataPoster";
+import { verifyOtp, sendOtp } from "../../utils/Profile/dataPoster";
 import PropTypes from "prop-types";
 import { useToast } from "../../context/ToastContext";
 import { useNavigate } from "react-router-dom";
