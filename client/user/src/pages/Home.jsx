@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Container,
   Grid,
@@ -21,9 +21,16 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllProducts } from "../utils/dataGetter";
 
 const Home = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["products"],
+    queryFn: getAllProducts,
+  });
+
+  const products = useMemo(() => data?.data || [], [data]);
   const [sortOption, setSortOption] = useState("featured");
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(8);
+  const [productsPerPage] = useState(6);
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
@@ -32,8 +39,38 @@ const Home = () => {
     setSortOption(event.target.value);
   };
 
+  useEffect(() => {
+    setFilteredProducts(products);
+  }, [products]);
+
+  useEffect(() => {
+    if (!products) return;
+
+    let sortedProducts = [
+      ...(filteredProducts.length > 0 ? filteredProducts : products),
+    ];
+
+    if (sortOption === "priceLow") {
+      sortedProducts.sort((a, b) => {
+        const priceA = a.discount ? a.price * (1 - a.discount / 100) : a.price;
+        const priceB = b.discount ? b.price * (1 - b.discount / 100) : b.price;
+        return priceA - priceB;
+      });
+    } else if (sortOption === "priceHigh") {
+      sortedProducts.sort((a, b) => {
+        const priceA = a.discount ? a.price * (1 - a.discount / 100) : a.price;
+        const priceB = b.discount ? b.price * (1 - b.discount / 100) : b.price;
+        return priceB - priceA;
+      });
+    } else if (sortOption === "rating") {
+      sortedProducts.sort((a, b) => b.rating - a.rating);
+    }
+
+    setFilteredProducts(sortedProducts);
+  }, [sortOption, products, filteredProducts]);
+
   const handleFilterChange = (filterOptions) => {
-    const { category, priceRange, filters, sortBy } = filterOptions;
+    const { category, priceRange, filters } = filterOptions;
 
     // Apply filters
     let result = [...products];
@@ -57,7 +94,7 @@ const Home = () => {
     }
 
     if (filters.inStock) {
-      result = result.filter((product) => product.inStock);
+      result = result.filter((product) => product.quantity > 0);
     }
 
     if (filters.onSale) {
@@ -65,23 +102,23 @@ const Home = () => {
     }
 
     // Sort products
-    if (sortBy === "priceLow") {
-      result.sort((a, b) => {
-        const priceA = a.discount ? a.price * (1 - a.discount / 100) : a.price;
-        const priceB = b.discount ? b.price * (1 - b.discount / 100) : b.price;
-        return priceA - priceB;
-      });
-    } else if (sortBy === "priceHigh") {
-      result.sort((a, b) => {
-        const priceA = a.discount ? a.price * (1 - a.discount / 100) : a.price;
-        const priceB = b.discount ? b.price * (1 - b.discount / 100) : b.price;
-        return priceB - priceA;
-      });
-    } else if (sortBy === "rating") {
-      result.sort((a, b) => b.rating - a.rating);
-    }
+    // if (sortBy === "priceLow") {
+    //   result.sort((a, b) => {
+    //     const priceA = a.discount ? a.price * (1 - a.discount / 100) : a.price;
+    //     const priceB = b.discount ? b.price * (1 - b.discount / 100) : b.price;
+    //     return priceA - priceB;
+    //   });
+    // } else if (sortBy === "priceHigh") {
+    //   result.sort((a, b) => {
+    //     const priceA = a.discount ? a.price * (1 - a.discount / 100) : a.price;
+    //     const priceB = b.discount ? b.price * (1 - b.discount / 100) : b.price;
+    //     return priceB - priceA;
+    //   });
+    // } else if (sortBy === "rating") {
+    //   result.sort((a, b) => b.rating - a.rating);
+    // }
 
-    // setFilteredProducts(result);
+    setFilteredProducts(result);
     setCurrentPage(1); // Reset to first page when filters change
   };
 
@@ -90,13 +127,6 @@ const Home = () => {
     // Scroll to top when changing pages
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
-  const { data, isLoading } = useQuery({
-    queryKey: ["products"],
-    queryFn: getAllProducts,
-  });
-
-  const products = data?.data || [];
   // console.log(products);
 
   if (!data?.success || !data?.data) {
@@ -119,11 +149,16 @@ const Home = () => {
   // Pagination
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(
+  const productsToDisplay =
+    filteredProducts.length > 0 || filteredProducts.length === 0
+      ? filteredProducts
+      : products;
+
+  const currentProducts = productsToDisplay.slice(
     indexOfFirstProduct,
     indexOfLastProduct
   );
-  const pageCount = Math.ceil(products.length / productsPerPage);
+  const pageCount = Math.ceil(productsToDisplay.length / productsPerPage);
 
   // Loading skeleton
   const ProductSkeleton = () => (
@@ -167,7 +202,8 @@ const Home = () => {
               component="h1"
               sx={{ fontWeight: 600, mb: isSmallScreen ? 2 : 0 }}
             >
-              Products {products.length > 0 && `(${products.length})`}
+              Products{" "}
+              {productsToDisplay.length > 0 && `(${productsToDisplay.length})`}
             </Typography>
 
             <FormControl variant="outlined" size="small" sx={{ minWidth: 200 }}>
@@ -182,7 +218,7 @@ const Home = () => {
                 <MenuItem value="featured">Featured</MenuItem>
                 <MenuItem value="priceLow">Price: Low to High</MenuItem>
                 <MenuItem value="priceHigh">Price: High to Low</MenuItem>
-                <MenuItem value="rating">Top Rated</MenuItem>
+                {/* <MenuItem value="rating">Top Rated</MenuItem> */}
               </Select>
             </FormControl>
           </Box>

@@ -132,14 +132,14 @@ const ProductPage = () => {
                   color="primary"
                   sx={{ mr: 2, fontWeight: 600 }}
                 >
-                  ${discountedPrice.toFixed(2)}
+                  ₹{discountedPrice.toFixed(2)}
                 </Typography>
                 <Typography
                   variant="h6"
                   color="text.secondary"
                   sx={{ textDecoration: "line-through" }}
                 >
-                  ${product?.price.toFixed(2)}
+                  ₹{product?.price.toFixed(2)}
                 </Typography>
                 <Chip
                   label={`${product?.discount}% OFF`}
@@ -150,7 +150,7 @@ const ProductPage = () => {
               </>
             ) : (
               <Typography variant="h4" color="primary" sx={{ fontWeight: 600 }}>
-                ${product?.price.toFixed(2)}
+                ₹{product?.price.toFixed(2)}
               </Typography>
             )}
           </Box>

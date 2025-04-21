@@ -17,6 +17,9 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { addItemToCart } from "../utils/dataPoster";
+import { useToast } from "../context/ToastContext";
 
 const StyledCard = styled(Card)(() => ({
   maxWidth: 345,
@@ -54,31 +57,28 @@ const ProductCard = ({ product }) => {
   const [favorite, setFavorite] = useState(false);
   const navigate = useNavigate();
 
-  const {
-    _id,
-    name,
-    description,
-    category,
-    sellerId,
-    imageUrl,
-    price,
-    quantity,
-    discount,
-    ratings,
-    status,
-    createdAt,
-    updatedAt,
-  } = product;
-  console.log(
-    _id,
-    sellerId,
-    createdAt,
-    description,
-    category,
-    updatedAt,
-    status
-  );
-
+  const { _id, name, sellerId, imageUrl, price, quantity, discount, ratings } =
+    product;
+  // console.log(
+  //   _id,
+  //   sellerId,
+  //   createdAt,
+  //   description,
+  //   category,
+  //   updatedAt,
+  //   status
+  // );
+  const { showToast } = useToast();
+  const { mutate, isPending } = useMutation({
+    mutationFn: addItemToCart,
+    onSuccess: (res) => {
+      if (res.success) {
+        showToast(res.message, "success");
+      } else {
+        showToast("Error: " + res.message, "error");
+      }
+    },
+  });
   const discountedPrice = discount ? price * (1 - discount / 100) : price;
   const total = ratings.reduce((sum, value) => sum + value, 0); // Adds all ratings
   const rating = ratings.length > 0 ? total / ratings.length : 0; // Calculates average
@@ -86,6 +86,11 @@ const ProductCard = ({ product }) => {
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
+    mutate({
+      productId: _id,
+      quantity: 1,
+      sellerId,
+    });
   };
 
   const toggleFavorite = (e) => {
@@ -181,7 +186,7 @@ const ProductCard = ({ product }) => {
           startIcon={<ShoppingCartIcon />}
           size="small"
           onClick={handleAddToCart}
-          disabled={!inStock}
+          disabled={!inStock || isPending}
           sx={{
             flexGrow: 1,
             mr: 1,

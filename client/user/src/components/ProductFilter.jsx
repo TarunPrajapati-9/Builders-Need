@@ -33,15 +33,15 @@ const categories = [
   "All",
   "Flooring",
   "Plumbing",
-  "Concrete & Masonry",
-  "Electrical & Lighting",
+  "Concrete&Masonry",
+  "Electrical&Lighting",
   "Other",
 ];
 // const clean = name.replace(/\s+/g, "");
 const ProductFilter = ({
   onFilterChange,
   availableCategories = categories,
-  initialPrice = [0, 500],
+  initialPrice = [0, 100000],
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -206,11 +206,11 @@ const ProductFilter = ({
               onChangeCommitted={handlePriceChangeCommitted}
               valueLabelDisplay="auto"
               min={0}
-              max={50000}
+              max={100000}
               step={100}
               marks={[
                 { value: 0, label: "₹0" },
-                { value: 50000, label: "₹50000" },
+                { value: 100000, label: "₹100000" },
               ]}
             />
             <Box

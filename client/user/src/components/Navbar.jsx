@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AppBar,
   Box,
@@ -25,8 +25,9 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import HomeIcon from "@mui/icons-material/Home";
 import CategoryIcon from "@mui/icons-material/Category";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Login, Logout, MenuOpen, Widgets } from "@mui/icons-material";
+import Cookies from "js-cookie";
 
 // Styled search component
 const Search = styled("div")(({ theme }) => ({
@@ -100,6 +101,17 @@ const Navbar = () => {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const isCategoryMenuOpen = Boolean(categoryMenuAnchor);
 
+  const navigate = useNavigate();
+  const [token, setToken] = useState(Cookies.get("userToken"));
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setToken(Cookies.get("userToken"));
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -129,6 +141,12 @@ const Navbar = () => {
     setMobileDrawerOpen(!mobileDrawerOpen);
   };
 
+  const handleNavigate = (path) => () => {
+    setMobileDrawerOpen(false);
+    handleMenuClose();
+    navigate(path);
+  };
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -140,12 +158,20 @@ const Navbar = () => {
       transformOrigin={{ horizontal: "right", vertical: "top" }}
       anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Orders</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Wishlist</MenuItem>
+      <MenuItem onClick={handleNavigate("profile")}>Profile</MenuItem>
+      <MenuItem onClick={handleNavigate("my-orders")}>My Orders</MenuItem>
+      <MenuItem onClick={handleNavigate("/wishlist")}>Wishlist</MenuItem>
       <Divider />
-      <MenuItem onClick={handleMenuClose}>Sign out</MenuItem>
+      {token && (
+        <MenuItem
+          onClick={() => {
+            Cookies.remove("userToken");
+            navigate("/login");
+          }}
+        >
+          Sign out
+        </MenuItem>
+      )}
     </Menu>
   );
 
@@ -160,7 +186,32 @@ const Navbar = () => {
       transformOrigin={{ horizontal: "right", vertical: "top" }}
       anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
     >
-      <MenuItem>
+      {!token ? (
+        <MenuItem onClick={handleNavigate("/login")}>
+          <IconButton size="large" color="inherit">
+            <Badge color="error">
+              <Login />
+            </Badge>
+          </IconButton>
+          <p>Sign In</p>
+        </MenuItem>
+      ) : (
+        <MenuItem
+          onClick={() => {
+            Cookies.remove("userToken");
+            navigate("/login");
+          }}
+        >
+          <IconButton size="large" color="inherit">
+            <Badge color="error">
+              <Logout />
+            </Badge>
+          </IconButton>
+          <p>Sign Out</p>
+        </MenuItem>
+      )}
+
+      <MenuItem onClick={handleNavigate("/cart")}>
         <IconButton size="large" color="inherit">
           <Badge color="error">
             <ShoppingCartIcon />
@@ -177,7 +228,7 @@ const Navbar = () => {
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        <p>My Account</p>
       </MenuItem>
     </Menu>
   );
@@ -206,13 +257,13 @@ const Navbar = () => {
             <Logo variant="h5">BUILDER&apos;S NEED</Logo>
           </ListItem>
           <Divider />
-          <ListItem button>
+          <ListItem component={Link} to="/">
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
             <ListItemText primary="Home" />
           </ListItem>
-          <ListItem button>
+          <ListItem>
             <ListItemIcon>
               <CategoryIcon />
             </ListItemIcon>
@@ -223,14 +274,14 @@ const Navbar = () => {
               <ListItemText primary={category} />
             </ListItem>
           ))}
-          <ListItem button>
+          <ListItem component={Link} to="/wishlist">
             <ListItemIcon>
               <FavoriteIcon />
             </ListItemIcon>
             <ListItemText primary="Wishlist" />
           </ListItem>
           <Divider />
-          <ListItem button>
+          <ListItem component={Link} to="/profile">
             <ListItemIcon>
               <AccountCircle />
             </ListItemIcon>
@@ -257,7 +308,7 @@ const Navbar = () => {
               onClick={toggleMobileDrawer}
               sx={{ mr: 1 }}
             >
-              <MenuIcon />
+              <MenuOpen />
             </IconButton>
           )}
           <Logo variant="h5">BUILDER&apos;S NEED</Logo>
@@ -294,11 +345,37 @@ const Navbar = () => {
           </Search>
           {/* badgeContent={getCartCount()} */}
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <IconButton size="large" color="inherit">
-              <Badge color="error">
-                <ShoppingCartIcon />
-              </Badge>
-            </IconButton>
+            {!token ? (
+              <Button
+                color="inherit"
+                component={Link}
+                to="/login"
+                startIcon={<Login />}
+              >
+                Sign In
+              </Button>
+            ) : (
+              <Button
+                color="inherit"
+                component={Link}
+                to="/login"
+                startIcon={<Logout />}
+                onClick={() => {
+                  Cookies.remove("userToken");
+                  navigate("/login");
+                }}
+              >
+                Sign Out
+              </Button>
+            )}
+            <Button
+              color="inherit"
+              component={Link}
+              to="/cart"
+              startIcon={<ShoppingCartIcon />}
+            >
+              Cart
+            </Button>
             <IconButton
               size="large"
               edge="end"
@@ -321,7 +398,7 @@ const Navbar = () => {
               color="inherit"
             >
               <Badge color="error">
-                <ShoppingCartIcon />
+                <Widgets />
               </Badge>
             </IconButton>
           </Box>
