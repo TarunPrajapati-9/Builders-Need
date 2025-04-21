@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
-import { createResponse } from "../../Utils/createResponse";
-import Seller from "../../Models/Seller";
+import { createResponse } from "../../../Utils/createResponse";
+import Seller from "../../../Models/Seller";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { otpVerifiedStore } from "../../../Utils/sendOtp";
 
 export const registerSeller = async (
   req: Request,
@@ -17,6 +18,12 @@ export const registerSeller = async (
       res
         .status(400)
         .json(createResponse(false, "All fields are required", []));
+      return;
+    }
+    if (!otpVerifiedStore[email]) {
+      res
+        .status(403)
+        .json(createResponse(false, "OTP verification required!", []));
       return;
     }
 
@@ -50,7 +57,8 @@ export const registerSeller = async (
         expiresIn: "7d", // Token valid for 7 days
       }
     );
-
+    // Clear verified status after successful update
+    delete otpVerifiedStore[email];
     // Success response
     res.json(createResponse(true, "Seller registered successfully", { token }));
   } catch (error) {

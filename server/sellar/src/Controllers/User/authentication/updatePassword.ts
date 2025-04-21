@@ -1,11 +1,10 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import Seller from "../../Models/Seller"; // Assuming your model
-import { createResponse } from "../../Utils/createResponse";
-import { otpVerifiedStore } from "./sendOtp"; // import verified store
-import { sendOtp } from "./sendOtp"; // Assuming your sendOtp function exists
+import { createResponse } from "../../../Utils/createResponse";
+import { otpVerifiedStore, sendOtp } from "../../../Utils/sendOtp";
+import User from "../../../Models/User";
 
-export const checkSellerAndSendOtp = async (
+export const checkUserAndSendOtp = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -18,10 +17,10 @@ export const checkSellerAndSendOtp = async (
     }
 
     // Check if the seller exists with the provided email
-    const seller = await Seller.findOne({ email });
+    const user = await User.findOne({ email });
 
-    if (!seller) {
-      res.status(404).json({ message: "Seller not found with this email" });
+    if (!user) {
+      res.status(404).json({ message: "User not found with this email" });
       return;
     }
 
@@ -32,14 +31,14 @@ export const checkSellerAndSendOtp = async (
   }
 };
 
-export const updatePassword = async (
+export const updateUserPassword = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const { email, newPassword } = req.body;
+    const { email, password } = req.body;
 
-    if (!email || !newPassword) {
+    if (!email || !password) {
       res
         .status(400)
         .json(createResponse(false, "Email and new password are required", []));
@@ -55,17 +54,17 @@ export const updatePassword = async (
     }
 
     // Hash new password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Update password in database
-    const updatedSeller = await Seller.findOneAndUpdate(
+    const updatedSeller = await User.findOneAndUpdate(
       { email },
       { password: hashedPassword },
       { new: true }
     );
 
     if (!updatedSeller) {
-      res.status(404).json(createResponse(false, "Seller not found", []));
+      res.status(404).json(createResponse(false, "User not found", []));
       return;
     }
 

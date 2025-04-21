@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import nodemailer from "nodemailer";
-import { createResponse } from "../../Utils/createResponse";
+import { createResponse } from "./createResponse";
 
 // Define OTP storage type
 interface OtpEntry {
@@ -30,11 +30,11 @@ export const sendOtp = async (req: Request, res: Response): Promise<void> => {
     const email = req.body.email;
     if (!email) {
       res.status(400).json(createResponse(false, "Email is required", []));
+      return;
     }
 
     const otp = Math.floor(Math.random() * 900000) + 100000;
 
-    // Send OTP email
     const mailOptions = {
       from: process.env.USER_EMAIL as string,
       to: email,
@@ -42,24 +42,25 @@ export const sendOtp = async (req: Request, res: Response): Promise<void> => {
       text: `Your OTP code is: ${otp}`,
     };
 
-    transporter.sendMail(mailOptions, (error) => {
-      if (error) {
-        res.status(500).json(
-          createResponse(false, "Error sending email", {
-            error: error.message,
-          })
-        );
-      }
+    // Wrap sendMail in a promise
+    await new Promise<void>((resolve, reject) => {
+      transporter.sendMail(mailOptions, (error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
     });
 
-    // Store OTP with expiration time (5 minutes)
     otpStore[email] = { otp, expiresAt: Date.now() + 5 * 60 * 1000 };
-    // console.log(otpStore);
     res.json(createResponse(true, "OTP sent successfully", { email }));
-  } catch (error) {
+  } catch (error: any) {
     res
       .status(500)
-      .json(createResponse(false, "Internal Server Error", { error }));
+      .json(
+        createResponse(false, "Error sending email", { error: error.message })
+      );
   }
 };
 

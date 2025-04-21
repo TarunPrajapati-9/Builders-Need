@@ -12,7 +12,7 @@ declare module "express-serve-static-core" {
   }
 }
 
-export const authenticateSeller = (
+export const authenticate = (
   req: Request,
   res: Response,
   next: NextFunction

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import Item from "../../Models/Item";
-import { createResponse } from "../../Utils/createResponse";
-import Seller from "../../Models/Seller";
+import Item from "../../../Models/Item";
+import { createResponse } from "../../../Utils/createResponse";
+import Seller from "../../../Models/Seller";
 
 // get single item
 export const getItem = async (req: Request, res: Response): Promise<void> => {
@@ -68,17 +68,20 @@ export const getItemsBySeller = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { sellerId } = req.query;
+    const sellerId = req.user.id;
+    // console.log(sellerId);
     if (!sellerId) {
       res.status(400).json(createResponse(false, "Seller ID is required!", []));
       return;
     }
 
     const items = await Item.find({ sellerId });
+    // console.log(items);
     res.json(
       createResponse(true, "Items fetched by seller successfully", items)
     );
   } catch (error) {
+    console.log(error);
     res
       .status(500)
       .json(createResponse(false, "Internal Server Error", { error }));

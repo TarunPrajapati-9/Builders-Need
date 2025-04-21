@@ -10,8 +10,9 @@ import ItemList from "./pages/ItemList";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/NavBar";
 import EditItem from "./pages/EditItem";
-import OrdersPage from "./pages/MyOrder";
 import ProfilePage from "./pages/ProfilePage";
+import MyOrders from "./pages/MyOrder";
+import OrderDetailsPage from "./pages/OrderDetails";
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -34,7 +35,8 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/items" element={<ItemList />} />
             <Route path="/edit-item/:itemId" element={<EditItem />} />
-            <Route path="/my-orders" element={<OrdersPage />} />
+            <Route path="/my-orders" element={<MyOrders />} />
+            <Route path="/my-orders/:orderId" element={<OrderDetailsPage />} />
             <Route path="/add-item" element={<AddItem />} />
             <Route path="/profile" element={<ProfilePage />} />
           </Route>

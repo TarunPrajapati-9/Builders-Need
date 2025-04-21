@@ -1,14 +1,14 @@
 // updateProfile.ts
 import { Request, Response } from "express";
-import Seller from "../../Models/Seller";
-import { createResponse } from "../../Utils/createResponse";
+import Seller from "../../../Models/Seller";
+import { createResponse } from "../../../Utils/createResponse";
 
 export const updateProfile = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const { name, phone, location } = req.body;
+    const { name, phone, location, sellerType } = req.body;
 
     // Get seller ID from authenticated middleware
     const sellerId = req.user.id;
@@ -22,7 +22,7 @@ export const updateProfile = async (
 
     const updatedSeller = await Seller.findByIdAndUpdate(
       sellerId,
-      { name, phone, location },
+      { name, phone, location, sellerType },
       { new: true }
     );
 

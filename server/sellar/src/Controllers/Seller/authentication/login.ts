@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { createResponse } from "../../Utils/createResponse";
-import Seller from "../../Models/Seller";
+import { createResponse } from "../../../Utils/createResponse";
+import Seller from "../../../Models/Seller";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";

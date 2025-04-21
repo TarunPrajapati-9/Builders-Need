@@ -41,7 +41,7 @@ const ProfilePage = () => {
   const { showToast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["Profile"],
     queryFn: getProfile,
   });
@@ -129,7 +129,7 @@ const ProfilePage = () => {
     );
   }
 
-  if (isError) {
+  if (!data?.success || !data?.data?.seller) {
     return (
       <Box
         sx={{
@@ -140,7 +140,7 @@ const ProfilePage = () => {
         }}
       >
         <Alert severity="error">
-          {error?.response?.data?.message || "Something went wrong!"}
+          {data?.message || "Something went wrong!"}
         </Alert>
       </Box>
     );
@@ -171,8 +171,10 @@ const ProfilePage = () => {
             </Typography>
             <Typography variant="subtitle1" color="text.secondary">
               <Building size={16} style={{ marginRight: 5 }} />
-              {profile.sellerType.charAt(0).toUpperCase() +
-                profile.sellerType.slice(1)}
+              {profile.sellerType
+                ? profile.sellerType.charAt(0).toUpperCase() +
+                  profile.sellerType.slice(1)
+                : "Unknown Seller Type"}
             </Typography>
             <Box display="flex" gap={2} mt={1}>
               <Chip

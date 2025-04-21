@@ -15,6 +15,7 @@ import { useToast } from "../../context/ToastContext";
 import { useMutation } from "@tanstack/react-query";
 import { sendOtp } from "../../utils/Profile/dataPoster";
 import Cookies from "js-cookie";
+import { Link } from "react-router-dom";
 
 EmailStep.propTypes = {
   onNext: PropTypes.func.isRequired,
@@ -155,6 +156,18 @@ export default function EmailStep({ onNext }) {
           >
             {sentOtpPending ? "Sending..." : "Continue"}
           </Button>
+          <Box sx={{ mt: 4, textAlign: "center" }}>
+            <Link to="/login" style={{ textDecoration: "none" }}>
+              <Typography color="primary">
+                already have an account? Login
+              </Typography>
+            </Link>
+          </Box>
+          <Box sx={{ mt: 1, textAlign: "center" }}>
+            <Link to="/forgot-password" style={{ textDecoration: "none" }}>
+              <Typography color="primary">Forgot Password?</Typography>
+            </Link>
+          </Box>
         </Box>
       </CardContent>
     </Card>

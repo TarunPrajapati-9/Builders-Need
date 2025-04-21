@@ -1,17 +1,22 @@
 import express, { Router } from "express";
-import { sendOtp, verifyOtp } from "../Controllers/authentication/sendOtp";
-import { registerSeller } from "../Controllers/authentication/register";
-import { loginSeller } from "../Controllers/authentication/login";
-import { getSellerProfile } from "../Controllers/getDetails/profile";
-import { authenticateSeller } from "../Middleware/jwtAuthentication";
+import { sendOtp, verifyOtp } from "../Utils/sendOtp";
+import { registerSeller } from "../Controllers/Seller/authentication/register";
+import { loginSeller } from "../Controllers/Seller/authentication/login";
+import { getSellerProfile } from "../Controllers/Seller/getDetails/profile";
+import { authenticate } from "../Middleware/jwtAuthentication";
 import {
   checkSellerAndSendOtp,
   updatePassword,
-} from "../Controllers/authentication/updatePassoword";
+} from "../Controllers/Seller/authentication/updatePassword";
 import {
   deleteAccount,
   updateProfile,
-} from "../Controllers/authentication/updateAndDelete";
+} from "../Controllers/Seller/authentication/updateAndDelete";
+import {
+  getOrderById,
+  getSellerOrders,
+} from "../Controllers/Seller/orders/getOrders";
+import { updateOrderStatus } from "../Controllers/Seller/orders/updateOrders";
 
 const router: Router = express.Router();
 
@@ -27,10 +32,13 @@ router.post("/forget-password/verify-otp", verifyOtp);
 router.post("/forget-password/update-password", updatePassword);
 
 //update and delete routes
-router.put("/update-profile", authenticateSeller, updateProfile);
-router.delete("/delete-account", authenticateSeller, deleteAccount);
+router.put("/update-profile", authenticate, updateProfile);
+router.put("/my-orders/:orderId", authenticate, updateOrderStatus);
+router.delete("/delete-account", authenticate, deleteAccount);
 
 //get routes
-router.get("/profile", authenticateSeller, getSellerProfile);
+router.get("/profile", authenticate, getSellerProfile);
+router.get("/my-orders", authenticate, getSellerOrders);
+router.get("/my-orders/:orderId", authenticate, getOrderById);
 
 export default router;

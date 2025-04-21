@@ -13,6 +13,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "../context/ToastContext";
 import { addItem } from "../utils/Items/dataPoster";
+import FullScreenLoader from "../components/FullScreenLoader";
 
 const CATEGORIES = [
   "Flooring",
@@ -24,6 +25,7 @@ const CATEGORIES = [
 
 export default function AddItem() {
   const navigate = useNavigate();
+  const [imageUploading, setImageUploading] = useState(false);
   const { showToast } = useToast();
 
   const [formData, setFormData] = useState({
@@ -94,6 +96,7 @@ export default function AddItem() {
     }
 
     try {
+      setImageUploading(true);
       const imageData = new FormData();
       imageData.append("file", formData.imageFile);
       imageData.append("upload_preset", "buildersneed");
@@ -121,13 +124,15 @@ export default function AddItem() {
         discount: Number(formData.discount),
         imageUrl: imageJson.secure_url,
       };
-
+      setImageUploading(false);
       mutate(itemData);
     } catch (err) {
       setFormErrors({ general: err.message });
     }
   };
-
+  if (isPending || imageUploading) {
+    return <FullScreenLoader />;
+  }
   return (
     <Box sx={{ p: 3, mx: "auto" }}>
       <Typography variant="h5" component="h1" sx={{ mb: 2 }} fontWeight="bold">

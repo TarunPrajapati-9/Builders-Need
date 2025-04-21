@@ -1,21 +1,20 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 interface IOrder extends Document {
-  buyerName: string;
-  buyerEmail: string;
+  sellerId: mongoose.Schema.Types.ObjectId;
+  userId: mongoose.Schema.Types.ObjectId;
   items: Array<{
     itemId: mongoose.Schema.Types.ObjectId;
     quantity: number;
   }>;
   totalAmount: number;
   status: string;
-  sellerId: mongoose.Schema.Types.ObjectId;
 }
 
-const orderSchema: Schema = new Schema(
+const orderSchema: Schema = new Schema<IOrder>(
   {
-    buyerName: { type: String, required: true },
-    buyerEmail: { type: String, required: true },
+    sellerId: { type: mongoose.Schema.Types.ObjectId, ref: "Seller" },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     items: [
       {
         itemId: { type: mongoose.Schema.Types.ObjectId, ref: "Item" },
@@ -28,7 +27,6 @@ const orderSchema: Schema = new Schema(
       enum: ["Pending", "Confirmed", "Shipped", "Delivered", "Cancelled"],
       default: "Pending",
     },
-    sellerId: { type: mongoose.Schema.Types.ObjectId, ref: "Seller" },
   },
   { timestamps: true }
 );

@@ -6,6 +6,7 @@ import "dotenv/config";
 import connectDB from "./Config/dbConnection";
 import sellerRoutes from "./Routes/sellerRoutes";
 import itemRoutes from "./Routes/itemRoutes";
+import userRoutes from "./Routes/userRoutes";
 
 // Connect to the database
 connectDB();
@@ -25,6 +26,7 @@ app.use(bodyParser.json());
 
 // Routes
 app.use("/api/seller", sellerRoutes);
+app.use("/api/user", userRoutes);
 app.use("/api/items", itemRoutes);
 
 // Start the server

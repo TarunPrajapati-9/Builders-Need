@@ -81,7 +81,7 @@ export default function Login() {
         p: 2,
       }}
     >
-      <Card sx={{ maxWidth: 400, width: "100%" }}>
+      <Card sx={{ maxWidth: 500, width: "100%" }}>
         <CardContent sx={{ p: 4 }}>
           <Typography
             variant="h5"
@@ -152,14 +152,16 @@ export default function Login() {
               {isPending ? "Logging in..." : "Login"}
             </Button>
 
-            <Box sx={{ textAlign: "center" }}>
-              <Link
-                to="/forgot-password"
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <Typography color="primary" variant="body2">
-                  Forgot Password?
+            <Box sx={{ mt: 4, textAlign: "center" }}>
+              <Link to="/" style={{ textDecoration: "none" }}>
+                <Typography color="primary">
+                  Don&apos;t have an account? Register
                 </Typography>
+              </Link>
+            </Box>
+            <Box sx={{ mt: 1, textAlign: "center" }}>
+              <Link to="/forgot-password" style={{ textDecoration: "none" }}>
+                <Typography color="primary">Forgot Password?</Typography>
               </Link>
             </Box>
           </form>

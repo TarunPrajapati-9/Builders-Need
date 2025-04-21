@@ -133,7 +133,7 @@ export default function ItemList() {
                   image={item.imageUrl || ""}
                   alt={item.name || "Item Image"}
                   style={{
-                    objectFit: "contain",
+                    objectFit: "cover",
                     userSelect: "none",
                     pointerEvents: "none",
                   }}
@@ -185,7 +185,7 @@ export default function ItemList() {
                     color="text.secondary"
                     sx={{ mb: 2 }}
                   >
-                    {item.description || "N/A"}
+                    {item.description.slice(0, 40) + "..." || "N/A"}
                   </Typography>
 
                   <Box sx={{ display: "flex", gap: 1, mb: 2 }}>

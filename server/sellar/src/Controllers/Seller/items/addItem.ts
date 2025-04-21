@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import Item from "../../Models/Item";
-import { createResponse } from "../../Utils/createResponse";
+import Item from "../../../Models/Item";
+import { createResponse } from "../../../Utils/createResponse";
 
 export const addItem = async (req: Request, res: Response): Promise<void> => {
   try {
