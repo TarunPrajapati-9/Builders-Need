@@ -7,11 +7,11 @@ import ProductPage from "./pages/ProductPage";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgetPassword";
-import Cart from "./pages/cart";
 import ToastProvider from "./context/ToastProvider";
 import MyOrdersPage from "./pages/MyOrders";
 import MyOrderDetailsPage from "./pages/OrderDetails";
 import ProfilePage from "./pages/ProfilePage";
+import Cart from "./pages/Cart";
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
