@@ -12,7 +12,8 @@ import userRoutes from "./Routes/userRoutes";
 connectDB();
 
 const app: Application = express();
-const port: number = 5000;
+const port: number = Number(process.env.PORT) || 5000;
+// console.log(port);
 
 // Root route for basic testing
 app.get("/", (req: Request, res: Response): void => {
