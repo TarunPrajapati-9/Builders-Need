@@ -22,8 +22,10 @@ import { useNavigate } from "react-router-dom";
 import { getMyOrders } from "../utils/dataGetter";
 import PageHeader from "../components/orders/PageHeader";
 import StatusBadge from "../components/orders/StatusBadge";
+import Cookies from "js-cookie";
 
 const MyOrdersPage = () => {
+  const token = Cookies.get("userToken");
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
@@ -34,6 +36,7 @@ const MyOrdersPage = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["userOrders"],
     queryFn: getMyOrders,
+    enabled: !!token,
   });
 
   if (isLoading) {

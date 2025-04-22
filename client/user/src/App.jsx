@@ -1,9 +1,5 @@
-import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
-// import Cart from "./components/Cart";
-import theme from "./theme/theme";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -45,12 +41,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <ToastProvider>
-            <CssBaseline />
-            <AppContent />
-          </ToastProvider>
-        </ThemeProvider>
+        <ToastProvider>
+          <AppContent />
+        </ToastProvider>
       </BrowserRouter>
     </QueryClientProvider>
   );

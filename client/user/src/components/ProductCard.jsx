@@ -75,7 +75,7 @@ const ProductCard = ({ product }) => {
       if (res.success) {
         showToast(res.message, "success");
       } else {
-        showToast("Error: " + res.message, "error");
+        showToast("Error: " + "kindly login first", "error");
       }
     },
   });

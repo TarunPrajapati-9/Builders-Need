@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Container, Box, Alert, Typography } from "@mui/material";
+import { Container, Box, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import { getCartItems } from "../utils/dataGetter";
 import {
@@ -15,11 +15,14 @@ import OrderSummary from "../components/cart/OrderSummary";
 import EmptyCart from "../components/cart/EmptyCart";
 import { cartStyles } from "../styles/cardStyles";
 import { placeOrder } from "../utils/dataPoster";
+import Cookies from "js-cookie";
 
 function Cart() {
+  const token = Cookies.get("userToken");
   const { data, isLoading } = useQuery({
     queryKey: ["cart"],
     queryFn: getCartItems,
+    enabled: !!token,
   });
   const { showToast } = useToast();
   const queryClient = useQueryClient();
@@ -156,16 +159,16 @@ function Cart() {
 
   if (isLoading) return <FullScreenLoader />;
 
-  if (!data?.success || !data?.data) {
-    return (
-      <Box sx={cartStyles.errorContainer}>
-        <Alert severity="error" sx={cartStyles.errorAlert}>
-          Sign In to see your cart items!
-          <p>{data?.message || "Something went wrong!"}</p>
-        </Alert>
-      </Box>
-    );
-  }
+  // if (!data?.data) {
+  //   return (
+  //     <Box sx={cartStyles.errorContainer}>
+  //       <Alert severity="error" sx={cartStyles.errorAlert}>
+  //         Sign In to see your cart items!
+  //         {/* <p>{data?.message || "Something went wrong!"}</p> */}
+  //       </Alert>
+  //     </Box>
+  //   );
+  // }
 
   const cartItems = data?.data || [];
   // Calculate cart totals
@@ -195,7 +198,7 @@ function Cart() {
           Your Shopping Cart
         </Typography>
 
-        {cartItems.length === 0 ? (
+        {cartItems.length === 0 || !data?.data ? (
           <EmptyCart />
         ) : (
           <Box sx={cartStyles.cartContent}>

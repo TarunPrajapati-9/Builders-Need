@@ -19,8 +19,12 @@ import ProductFilter from "../components/ProductFilter";
 // import products from "../data/products";
 import { useQuery } from "@tanstack/react-query";
 import { getAllProducts } from "../utils/dataGetter";
+import { useSearchParams } from "react-router-dom";
 
 const Home = () => {
+  const [searchParams] = useSearchParams();
+  const queryParam = searchParams.get("query") || "";
+  // console.log(queryParam);
   const { data, isLoading } = useQuery({
     queryKey: ["products"],
     queryFn: getAllProducts,
@@ -40,16 +44,19 @@ const Home = () => {
   };
 
   useEffect(() => {
-    setFilteredProducts(products);
-  }, [products]);
-
-  useEffect(() => {
     if (!products) return;
+    let sortedProducts = [...products];
 
-    let sortedProducts = [
-      ...(filteredProducts.length > 0 ? filteredProducts : products),
-    ];
-
+    // Apply Search Filter Here
+    if (queryParam) {
+      const searchText = queryParam.toLowerCase();
+      sortedProducts = sortedProducts.filter(
+        (product) =>
+          product.name.toLowerCase().includes(searchText) ||
+          product.description.toLowerCase().includes(searchText)
+      );
+    }
+    // Sort logic
     if (sortOption === "priceLow") {
       sortedProducts.sort((a, b) => {
         const priceA = a.discount ? a.price * (1 - a.discount / 100) : a.price;
@@ -67,7 +74,7 @@ const Home = () => {
     }
 
     setFilteredProducts(sortedProducts);
-  }, [sortOption, products, filteredProducts]);
+  }, [sortOption, products, queryParam]);
 
   const handleFilterChange = (filterOptions) => {
     const { category, priceRange, filters } = filterOptions;
@@ -139,9 +146,7 @@ const Home = () => {
           height: "300px",
         }}
       >
-        <Alert severity="error">
-          {data?.message || "Something went wrong!"}
-        </Alert>
+        <Alert severity="error">{data?.message}</Alert>
       </Box>
     );
   }

@@ -93,6 +93,7 @@ const Navbar = () => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [categoryMenuAnchor, setCategoryMenuAnchor] = useState(null);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -211,7 +212,7 @@ const Navbar = () => {
         </MenuItem>
       )}
 
-      <MenuItem onClick={handleNavigate("/cart")}>
+      <MenuItem onClick={() => navigate("/cart")}>
         <IconButton size="large" color="inherit">
           <Badge color="error">
             <ShoppingCartIcon />
@@ -341,6 +342,11 @@ const Navbar = () => {
             <StyledInputBase
               placeholder="Search products…"
               inputProps={{ "aria-label": "search" }}
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                navigate(`?query=${e.target.value}`);
+              }}
             />
           </Search>
           {/* badgeContent={getCartCount()} */}
@@ -348,8 +354,7 @@ const Navbar = () => {
             {!token ? (
               <Button
                 color="inherit"
-                component={Link}
-                to="/login"
+                onClick={handleNavigate("/login")}
                 startIcon={<Login />}
               >
                 Sign In

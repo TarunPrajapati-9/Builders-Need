@@ -11,15 +11,17 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Alert,
   CircularProgress,
 } from "@mui/material";
 import { Edit, Save, X, Phone, Mail, MapPin } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "../context/ToastContext";
 import { getProfile } from "../utils/dataGetter";
+import Cookies from "js-cookie";
+import LoginPrompt from "../components/LoginPrompt";
 
 const ProfilePage = () => {
+  const token = Cookies.get("userToken");
   const [isEditing, setIsEditing] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const { showToast } = useToast();
@@ -28,6 +30,7 @@ const ProfilePage = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["UserProfile"],
     queryFn: getProfile,
+    enabled: !!token,
   });
 
   const { mutate, isPending } = useMutation({
@@ -111,18 +114,7 @@ const ProfilePage = () => {
   }
 
   if (!data?.success || !data?.data?.user) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="300px"
-      >
-        <Alert severity="error">
-          {data?.message || "Something went wrong!"}
-        </Alert>
-      </Box>
-    );
+    return <LoginPrompt />;
   }
 
   return (
