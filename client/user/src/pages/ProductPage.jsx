@@ -17,9 +17,11 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getProductById } from "../utils/dataGetter";
 import FullScreenLoader from "../components/FullScreenLoader";
+import { useToast } from "../context/ToastContext";
+import { addItemToCart } from "../utils/dataPoster";
 
 const ProductPage = () => {
   const [cartQuantity, setCartQuantity] = useState(1);
@@ -30,6 +32,17 @@ const ProductPage = () => {
     queryFn: () => getProductById(productId),
   });
 
+  const { showToast } = useToast();
+  const { mutate, isPending } = useMutation({
+    mutationFn: addItemToCart,
+    onSuccess: (res) => {
+      if (res.success) {
+        showToast(res.message, "success");
+      } else {
+        showToast("Error: " + "kindly login first", "error");
+      }
+    },
+  });
   const product = data?.data;
 
   const discountedPrice = product?.discount
@@ -42,8 +55,13 @@ const ProductPage = () => {
 
   const inStock = product?.quantity > 0;
 
-  const handleAddToCart = () => {
-    alert("Product added to cart!");
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
+    mutate({
+      productId: productId,
+      quantity: cartQuantity,
+      sellerId: product?.sellerId,
+    });
   };
 
   const increaseQuantity = () => {
@@ -57,12 +75,12 @@ const ProductPage = () => {
   };
 
   // Loader — Centered
-  if (isLoading) {
+  if (isLoading || isPending) {
     return <FullScreenLoader />;
   }
 
   // Error — Centered
-  if (!data?.success || !data?.data) {
+  if (data && (!data?.success || !data?.data)) {
     return (
       <Box
         sx={{

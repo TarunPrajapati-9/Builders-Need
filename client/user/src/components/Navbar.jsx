@@ -23,10 +23,15 @@ import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import HomeIcon from "@mui/icons-material/Home";
-import CategoryIcon from "@mui/icons-material/Category";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Link, useNavigate } from "react-router-dom";
-import { Login, Logout, MenuOpen, Widgets } from "@mui/icons-material";
+import {
+  Login,
+  Logout,
+  MenuOpen,
+  Storefront,
+  Widgets,
+} from "@mui/icons-material";
 import Cookies from "js-cookie";
 
 // Styled search component
@@ -79,19 +84,9 @@ const Logo = styled(Typography)(() => ({
   alignItems: "center",
 }));
 
-const categories = [
-  "Electronics",
-  "Clothing",
-  "Home",
-  "Accessories",
-  "Fitness",
-  "Office",
-];
-
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-  const [categoryMenuAnchor, setCategoryMenuAnchor] = useState(null);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -100,7 +95,6 @@ const Navbar = () => {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  const isCategoryMenuOpen = Boolean(categoryMenuAnchor);
 
   const navigate = useNavigate();
   const [token, setToken] = useState(Cookies.get("userToken"));
@@ -130,13 +124,13 @@ const Navbar = () => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const handleCategoryMenuOpen = (event) => {
-    setCategoryMenuAnchor(event.currentTarget);
-  };
+  // const handleCategoryMenuOpen = (event) => {
+  //   setCategoryMenuAnchor(event.currentTarget);
+  // };
 
-  const handleCategoryMenuClose = () => {
-    setCategoryMenuAnchor(null);
-  };
+  // const handleCategoryMenuClose = () => {
+  //   setCategoryMenuAnchor(null);
+  // };
 
   const toggleMobileDrawer = () => {
     setMobileDrawerOpen(!mobileDrawerOpen);
@@ -234,22 +228,6 @@ const Navbar = () => {
     </Menu>
   );
 
-  const categoryMenu = (
-    <Menu
-      anchorEl={categoryMenuAnchor}
-      open={isCategoryMenuOpen}
-      onClose={handleCategoryMenuClose}
-      transformOrigin={{ horizontal: "left", vertical: "top" }}
-      anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
-    >
-      {categories.map((category) => (
-        <MenuItem key={category} onClick={handleCategoryMenuClose}>
-          {category}
-        </MenuItem>
-      ))}
-    </Menu>
-  );
-
   const mobileDrawer = (
     <Drawer anchor="left" open={mobileDrawerOpen} onClose={toggleMobileDrawer}>
       <Box sx={{ width: 250 }} role="presentation" onClick={toggleMobileDrawer}>
@@ -262,19 +240,8 @@ const Navbar = () => {
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
-            <ListItemText primary="Home" />
+            <ListItemText primary="Products" />
           </ListItem>
-          <ListItem>
-            <ListItemIcon>
-              <CategoryIcon />
-            </ListItemIcon>
-            <ListItemText primary="Categories" />
-          </ListItem>
-          {categories.map((category) => (
-            <ListItem button key={category} sx={{ pl: 4 }}>
-              <ListItemText primary={category} />
-            </ListItem>
-          ))}
           <ListItem component={Link} to="/wishlist">
             <ListItemIcon>
               <FavoriteIcon />
@@ -321,17 +288,8 @@ const Navbar = () => {
                 LinkComponent={Link}
                 to="/"
               >
-                Home
+                Products
               </Button>
-              <Button
-                color="inherit"
-                onClick={handleCategoryMenuOpen}
-                aria-controls="category-menu"
-                aria-haspopup="true"
-              >
-                Categories
-              </Button>
-              {categoryMenu}
             </>
           )}
           <Box sx={{ flexGrow: 1 }} />
@@ -351,6 +309,16 @@ const Navbar = () => {
           </Search>
           {/* badgeContent={getCartCount()} */}
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <Button
+              color="inherit"
+              LinkComponent={Link}
+              to="https://seller-buildersneed.vercel.app"
+              startIcon={<Storefront />}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Become a Seller
+            </Button>
             {!token ? (
               <Button
                 color="inherit"

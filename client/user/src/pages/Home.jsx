@@ -136,7 +136,7 @@ const Home = () => {
   };
   // console.log(products);
 
-  if (!data?.success || !data?.data) {
+  if (data && (!data?.success || !data?.data)) {
     return (
       <Box
         sx={{
