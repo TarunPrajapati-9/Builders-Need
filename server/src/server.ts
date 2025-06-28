@@ -8,7 +8,7 @@ import sellerRoutes from "./Routes/sellerRoutes";
 import itemRoutes from "./Routes/itemRoutes";
 import userRoutes from "./Routes/userRoutes";
 import walletRoutes from "./Routes/walletRoutes";
-import adminRoutes from "./Routes/AdminRoutes";
+import adminRoutes from "./Routes/adminRoutes";
 
 // Connect to the database
 connectDB();
