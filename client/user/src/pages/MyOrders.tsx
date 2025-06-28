@@ -26,8 +26,6 @@ import Cookies from "js-cookie";
 
 const MyOrdersPage = () => {
   const token = Cookies.get("userToken");
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -161,7 +159,7 @@ const MyOrdersPage = () => {
             variant="contained"
             color="primary"
             sx={{ mt: 2 }}
-            onClick={() => navigate("/products")}
+            onClick={() => navigate("/")}
           >
             Browse Products
           </Button>

@@ -29,11 +29,10 @@ router.post("/cart", authenticate, addToCart);
 router.post("/makeOrder", authenticate, makeOrder);
 
 router.get("/profile", authenticate, getUserProfile);
-router.get("/wishlist");
 router.get("/my-orders", authenticate, getUserOrders);
 router.get("/cart", authenticate, getCartItems);
 
-router.put("/update-profile");
+router.put("/update-profile"); //pending
 router.put("/update-cart-item-quantity", authenticate, updateCartItemQuantity);
 
 router.delete("/delete-cart-item", authenticate, deleteCartItem);

@@ -175,3 +175,100 @@ export async function placeOrder(params) {
     };
   }
 }
+
+export async function createWallet(pin) {
+  try {
+    const token = Cookies.get("userToken");
+    const { data } = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/api/user/wallet/create-wallet`,
+      {
+        pin,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data;
+  } catch (err) {
+    console.log(err);
+    return {
+      success: false,
+      message: err.response?.data?.message || "Something went wrong",
+      data: [],
+    };
+  }
+}
+
+export async function addMoneyToWallet(params) {
+  try {
+    const token = Cookies.get("userToken");
+    const { data } = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/api/user/wallet/add-money`,
+      {
+        ...params,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    // console.log(data);
+    return data;
+  } catch (err) {
+    console.log(err);
+    return {
+      success: false,
+      message: err.response?.data?.message || "Something went wrong",
+      data: [],
+    };
+  }
+}
+
+export async function debitMoneyFromWallet(params) {
+  try {
+    const token = Cookies.get("userToken");
+    const { data } = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/api/user/wallet/debit-money`,
+      {
+        ...params,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    // console.log(data);
+    return data;
+  } catch (err) {
+    console.log(err);
+    return {
+      success: false,
+      message: err.response?.data?.message || "Something went wrong",
+      data: [],
+    };
+  }
+}
+
+export async function adminLogin(params) {
+  try {
+    const { data } = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/api/admin/login`,
+      {
+        ...params,
+      }
+    );
+    // console.log(data);
+    return data;
+  } catch (err) {
+    console.log(err);
+    return {
+      success: false,
+      message: err.response?.data?.message || "Something went wrong",
+      data: [],
+    };
+  }
+}

@@ -2,7 +2,13 @@ import { Paper, Typography, Box, Button, Divider } from "@mui/material";
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
 
-function OrderSummary({ subtotal, deliveryFee, total, onCheckout }) {
+function OrderSummary({
+  subtotal,
+  deliveryFee,
+  total,
+  onCheckout,
+  disabled = false,
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -59,24 +65,29 @@ function OrderSummary({ subtotal, deliveryFee, total, onCheckout }) {
           </Typography>
         </Box>
 
-        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+        <motion.div
+          whileHover={{ scale: disabled ? 1 : 1.02 }}
+          whileTap={{ scale: disabled ? 1 : 0.98 }}
+        >
           <Button
             variant="contained"
             fullWidth
             onClick={onCheckout}
+            disabled={disabled}
             sx={{
               py: 1.5,
               fontWeight: 600,
               textTransform: "none",
               fontSize: "1rem",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+              boxShadow: disabled ? "none" : "0 4px 12px rgba(0,0,0,0.15)",
               "&:hover": {
-                boxShadow: "0 6px 16px rgba(0,0,0,0.2)",
+                boxShadow: disabled ? "none" : "0 6px 16px rgba(0,0,0,0.2)",
               },
               borderRadius: 2,
+              opacity: disabled ? 0.6 : 1,
             }}
           >
-            Proceed to Checkout
+            {disabled ? "Check Stock Availability" : "Proceed to Checkout"}
           </Button>
         </motion.div>
       </Paper>
@@ -89,6 +100,7 @@ OrderSummary.propTypes = {
   deliveryFee: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
   onCheckout: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
 };
 
 export default OrderSummary;

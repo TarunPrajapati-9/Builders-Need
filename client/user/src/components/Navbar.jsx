@@ -23,7 +23,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import HomeIcon from "@mui/icons-material/Home";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Login,
@@ -33,6 +32,7 @@ import {
   Widgets,
 } from "@mui/icons-material";
 import Cookies from "js-cookie";
+import { History, StoreIcon, Wallet } from "lucide-react";
 
 // Styled search component
 const Search = styled("div")(({ theme }) => ({
@@ -155,7 +155,7 @@ const Navbar = () => {
     >
       <MenuItem onClick={handleNavigate("profile")}>Profile</MenuItem>
       <MenuItem onClick={handleNavigate("my-orders")}>My Orders</MenuItem>
-      <MenuItem onClick={handleNavigate("/wishlist")}>Wishlist</MenuItem>
+      <MenuItem onClick={handleNavigate("my-wallet")}>My Wallet</MenuItem>
       <Divider />
       {token && (
         <MenuItem
@@ -214,6 +214,22 @@ const Navbar = () => {
         </IconButton>
         <p>Cart</p>
       </MenuItem>
+      <MenuItem onClick={() => navigate("/my-orders")}>
+        <IconButton size="large" color="inherit">
+          <Badge color="error">
+            <History />
+          </Badge>
+        </IconButton>
+        <p>My Orders</p>
+      </MenuItem>
+      <MenuItem onClick={() => navigate("/my-wallet")}>
+        <IconButton size="large" color="inherit">
+          <Badge color="error">
+            <Wallet />
+          </Badge>
+        </IconButton>
+        <p>My Wallet</p>
+      </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -236,17 +252,22 @@ const Navbar = () => {
             <Logo variant="h5">BUILDER&apos;S NEED</Logo>
           </ListItem>
           <Divider />
+          <ListItem
+            component={Link}
+            to="https://seller-buildersneed.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <ListItemIcon>
+              <StoreIcon />
+            </ListItemIcon>
+            <ListItemText primary="Become Seller" />
+          </ListItem>
           <ListItem component={Link} to="/">
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
             <ListItemText primary="Products" />
-          </ListItem>
-          <ListItem component={Link} to="/wishlist">
-            <ListItemIcon>
-              <FavoriteIcon />
-            </ListItemIcon>
-            <ListItemText primary="Wishlist" />
           </ListItem>
           <Divider />
           <ListItem component={Link} to="/profile">

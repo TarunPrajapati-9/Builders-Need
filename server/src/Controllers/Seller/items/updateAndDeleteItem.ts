@@ -49,7 +49,7 @@ export const updateItem = async (
     item.price = price || item.price;
     item.quantity = quantity || item.quantity;
     item.discount = discount || item.discount;
-    item.status = status || item.status;
+    item.status = item.quantity >= 1 ? "active" : item.status;
 
     await item.save();
 

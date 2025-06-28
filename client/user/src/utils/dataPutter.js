@@ -74,3 +74,55 @@ export async function clearCart() {
     };
   }
 }
+
+export async function updateWalletPin(params) {
+  try {
+    const token = Cookies.get("userToken");
+    const { data } = await axios.put(
+      `${import.meta.env.VITE_BACKEND_URL}/api/user/wallet/update-wallet-pin`,
+      {
+        ...params,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    // console.log(data);
+    return data;
+  } catch (err) {
+    console.log(err);
+    return {
+      success: false,
+      message: err.response?.data?.message || "Something went wrong",
+      data: {},
+    };
+  }
+}
+
+export async function approvePayment(params) {
+  try {
+    const token = Cookies.get("adminToken");
+    const { data } = await axios.put(
+      `${import.meta.env.VITE_BACKEND_URL}/api/admin/payments-approval`,
+      {
+        ...params,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    // console.log(data);
+    return data;
+  } catch (err) {
+    console.log(err);
+    return {
+      success: false,
+      message: err.response?.data?.message || "Something went wrong",
+      data: [],
+    };
+  }
+}

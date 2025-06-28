@@ -1,8 +1,8 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Container, Box, Typography } from "@mui/material";
+import { Container, Box, Typography, Alert } from "@mui/material";
 import { motion } from "framer-motion";
-import { getCartItems } from "../utils/dataGetter";
+import { getCartItems, getProductById } from "../utils/dataGetter";
 import {
   clearCart,
   deleteCartItem,
@@ -16,6 +16,8 @@ import EmptyCart from "../components/cart/EmptyCart";
 import { cartStyles } from "../styles/cardStyles";
 import { placeOrder } from "../utils/dataPoster";
 import Cookies from "js-cookie";
+import PaymentGateway from "./Payment";
+import { useNavigate } from "react-router-dom";
 
 function Cart() {
   const token = Cookies.get("userToken");
@@ -28,7 +30,11 @@ function Cart() {
   const queryClient = useQueryClient();
 
   const [quantities, setQuantities] = useState({});
+  const [showGateway, setShowGateway] = useState(false);
+  const [outOfStockItems, setOutOfStockItems] = useState([]);
+
   const timers = useRef({});
+  const navigate = useNavigate();
 
   const { mutate: removeItemMutation, isPending } = useMutation({
     mutationFn: deleteCartItem,
@@ -66,6 +72,49 @@ function Cart() {
     },
   });
 
+  // Stock validation effect
+  useEffect(() => {
+    const validateStock = async () => {
+      if (!data?.data || data.data.length === 0) {
+        setOutOfStockItems([]);
+        return;
+      }
+
+      const outOfStock = [];
+
+      for (const item of data.data) {
+        try {
+          const productResponse = await getProductById(item.productId);
+          if (productResponse.success && productResponse.data) {
+            const currentQuantity = quantities[item.productId] || item.quantity;
+            const availableStock = productResponse.data.quantity;
+
+            if (currentQuantity > availableStock) {
+              outOfStock.push({
+                productId: item.productId,
+                productName: item.productName,
+                requestedQuantity: currentQuantity,
+                availableStock: availableStock,
+              });
+            }
+          }
+        } catch (error) {
+          console.error(
+            `Error fetching stock for product ${item.productId}:`,
+            error
+          );
+        }
+      }
+
+      setOutOfStockItems(outOfStock);
+    };
+
+    validateStock();
+  }, [data?.data, quantities]);
+
+  // Check if checkout should be disabled
+  const isCheckoutDisabled = outOfStockItems.length > 0;
+
   // Function to update quantity with debounce logic
   const updateQuantity = (productId, change) => {
     setQuantities((prev) => {
@@ -102,11 +151,25 @@ function Cart() {
     removeItemMutation({ productId: id });
   };
 
-  const handleCheckout = async () => {
+  const handleCheckout = () => {
     if (cartItems.length === 0) {
       showToast("Your cart is empty!", "error");
       return;
     }
+
+    if (isCheckoutDisabled) {
+      showToast(
+        "Some items in your cart are not available in the requested quantity. Please adjust quantities.",
+        "error"
+      );
+      return;
+    }
+
+    setShowGateway(true); // Show fake gateway instead of placing order directly
+  };
+
+  const handleFakePaymentSuccess = async () => {
+    setShowGateway(false); // close the modal
 
     const groupedOrders = {};
     cartItems.forEach((item) => {
@@ -135,12 +198,13 @@ function Cart() {
         if (!res.success) {
           allOrdersSuccessful = false;
           showToast("Error placing order: " + res.message, "error");
-          break; // stop placing more if one fails
+          break;
         }
       }
 
       if (allOrdersSuccessful) {
-        showToast("All orders placed successfully!", "success");
+        showToast("order placed successfully!", "success");
+        navigate("/my-orders");
         clearCartMutation.mutate();
       }
     } catch (error) {
@@ -158,17 +222,6 @@ function Cart() {
   };
 
   if (isLoading) return <FullScreenLoader />;
-
-  // if (!data?.data) {
-  //   return (
-  //     <Box sx={cartStyles.errorContainer}>
-  //       <Alert severity="error" sx={cartStyles.errorAlert}>
-  //         Sign In to see your cart items!
-  //         {/* <p>{data?.message || "Something went wrong!"}</p> */}
-  //       </Alert>
-  //     </Box>
-  //   );
-  // }
 
   const cartItems = data?.data || [];
   // Calculate cart totals
@@ -202,6 +255,25 @@ function Cart() {
           <EmptyCart />
         ) : (
           <Box sx={cartStyles.cartContent}>
+            {/* Stock Warning Messages */}
+            {outOfStockItems.length > 0 && (
+              <Box sx={{ mb: 2 }}>
+                {outOfStockItems.map((item) => (
+                  <Alert
+                    key={item.productId}
+                    severity="warning"
+                    sx={{ mb: 1, borderRadius: 2 }}
+                  >
+                    <Typography variant="body2">
+                      <strong>{item.productName}</strong> is not available as
+                      per your demand. Requested: {item.requestedQuantity},
+                      Available: {item.availableStock}
+                    </Typography>
+                  </Alert>
+                ))}
+              </Box>
+            )}
+
             <Box sx={cartStyles.cartItemsContainer}>
               {cartItems.map((item) => (
                 <CartItem
@@ -220,10 +292,17 @@ function Cart() {
               deliveryFee={deliveryFee}
               total={total}
               onCheckout={handleCheckout}
+              disabled={isCheckoutDisabled}
             />
           </Box>
         )}
       </motion.div>
+      <PaymentGateway
+        open={showGateway}
+        total={total}
+        onClose={() => setShowGateway(false)}
+        onSuccess={handleFakePaymentSuccess}
+      />
     </Container>
   );
 }

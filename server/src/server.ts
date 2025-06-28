@@ -7,6 +7,8 @@ import connectDB from "./Config/dbConnection";
 import sellerRoutes from "./Routes/sellerRoutes";
 import itemRoutes from "./Routes/itemRoutes";
 import userRoutes from "./Routes/userRoutes";
+import walletRoutes from "./Routes/walletRoutes";
+import adminRoutes from "./Routes/AdminRoutes";
 
 // Connect to the database
 connectDB();
@@ -29,7 +31,9 @@ app.use(bodyParser.json());
 // Routes
 app.use("/api/seller", sellerRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/user/wallet", walletRoutes);
 app.use("/api/items", itemRoutes);
+app.use("/api/admin", adminRoutes);
 
 // Start the server
 app.listen(port, () => {

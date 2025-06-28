@@ -148,3 +148,47 @@ export async function getProfile() {
     };
   }
 }
+
+export async function getWallet() {
+  try {
+    const token = Cookies.get("userToken");
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_BACKEND_URL}/api/user/wallet/get-wallet`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data;
+  } catch (err) {
+    console.log(err);
+    return {
+      success: false,
+      message: err.response?.data?.message || "Something went wrong",
+      data: [],
+    };
+  }
+}
+
+export async function getPaymentApproval() {
+  try {
+    const token = Cookies.get("adminToken");
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_BACKEND_URL}/api/admin/payments-approval`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data;
+  } catch (err) {
+    console.log(err);
+    return {
+      success: false,
+      message: err.response?.data?.message || "Something went wrong",
+      data: [],
+    };
+  }
+}

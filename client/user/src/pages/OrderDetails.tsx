@@ -75,6 +75,7 @@ const MyOrderDetailsPage = () => {
   }
 
   const order = data.data;
+  console.log(order);
 
   const getTimelineIcon = (status: string) => {
     switch (status) {

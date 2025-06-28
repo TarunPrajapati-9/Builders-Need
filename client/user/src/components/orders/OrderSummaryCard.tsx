@@ -14,13 +14,7 @@ interface OrderSummaryCardProps {
 }
 
 const OrderSummaryCard: React.FC<OrderSummaryCardProps> = ({ order }) => {
-  // Calculate subtotal (without discounts)
-  const subtotal = order.items.reduce((sum, item) => {
-    return sum + item.itemId.price * item.quantity;
-  }, 0);
-
-  // Calculate total discount amount
-  const totalDiscount = subtotal - order.totalAmount;
+  const totalAmount = order.totalAmount + 50; // Adding shipping cost
 
   return (
     <Card sx={{ boxShadow: 2, mb: 3 }}>
@@ -35,23 +29,14 @@ const OrderSummaryCard: React.FC<OrderSummaryCardProps> = ({ order }) => {
               Subtotal (
               {order.items.reduce((acc, item) => acc + item.quantity, 0)} items)
             </Typography>
-            <Typography variant="body2">₹{subtotal.toFixed(2)}</Typography>
-          </Box>
-
-          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
-            <Typography variant="body2" color="text.secondary">
-              Discount
-            </Typography>
-            <Typography variant="body2" color="error">
-              -₹{totalDiscount.toFixed(2)}
-            </Typography>
+            <Typography variant="body2">₹{order.totalAmount}</Typography>
           </Box>
 
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
             <Typography variant="body2" color="text.secondary">
               Shipping
             </Typography>
-            <Typography variant="body2">Free</Typography>
+            <Typography variant="body2">₹50</Typography>
           </Box>
 
           <Divider sx={{ my: 2 }} />
@@ -61,7 +46,7 @@ const OrderSummaryCard: React.FC<OrderSummaryCardProps> = ({ order }) => {
               Total Amount
             </Typography>
             <Typography variant="body1" fontWeight={700} color="primary">
-              ₹{order.totalAmount.toFixed(2)}
+              ₹ {totalAmount.toFixed(2)}
             </Typography>
           </Box>
         </Box>

@@ -27,7 +27,7 @@ export const addToCart = async (req: Request, res: Response) => {
           {
             productId: item._id,
             productName: item.name,
-            productPrice: item.price,
+            productPrice: item.price * (1 - (item.discount ?? 0) / 100),
             productImage: item.imageUrl,
             quantity,
             sellerId,
@@ -45,7 +45,7 @@ export const addToCart = async (req: Request, res: Response) => {
         cart.items.push({
           productId: item._id as Types.ObjectId,
           productName: item.name,
-          productPrice: item.price,
+          productPrice: item.price * (1 - (item.discount ?? 0) / 100),
           productImage: item.imageUrl,
           quantity,
           sellerId,

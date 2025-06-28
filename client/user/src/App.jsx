@@ -12,18 +12,19 @@ import MyOrdersPage from "./pages/MyOrders";
 import MyOrderDetailsPage from "./pages/OrderDetails";
 import ProfilePage from "./pages/ProfilePage";
 import Cart from "./pages/Cart";
+import UserWallet from "./pages/MyWallet";
+import AdminLogin from "./pages/admin/AdminLogin";
+import { useLocation } from "react-router-dom";
+import PaymentApproves from "./pages/admin/PaymentApproves";
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
   function AppContent() {
-    // const location = useLocation();
-    // const hideNavbar =
-    //   location.pathname === "/register" ||
-    //   location.pathname === "/login" ||
-    //   location.pathname === "/forget-password";
+    const location = useLocation();
+    const hideNavbar = location.pathname.startsWith("/admin");
     return (
       <>
-        <Navbar />
+        {!hideNavbar && <Navbar />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
@@ -31,9 +32,13 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/my-wallet" element={<UserWallet />} />
           <Route path="/my-orders" element={<MyOrdersPage />} />
           <Route path="/my-orders/:orderId" element={<MyOrderDetailsPage />} />
           <Route path="/product/:productId" element={<ProductPage />} />
+
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/admin/payment-approves" element={<PaymentApproves />} />
         </Routes>
       </>
     );
